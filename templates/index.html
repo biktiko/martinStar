@@ -1,0 +1,107 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Martin Star - Otmartina</title>
+    <!-- Tailwind CSS CDN for rapid prototyping -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="text-gray-800 font-sans antialiased min-h-screen flex flex-col bg-white relative">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Left: Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#">
+                        <img class="h-12 w-auto object-contain" src="{% static 'images/logo.png' %}" alt="Martin Star Logo">
+                    </a>
+                </div>
+
+                <!-- Center: Navigation -->
+                <nav class="hidden lg:flex space-x-8">
+                    <a href="#" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Home" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "About us" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Products" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Careers" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Contacts" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Online store" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Blog" %}</a>
+                </nav>
+
+                <!-- Right: Search & Language -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden sm:block">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% trans 'Search products...' %}">
+                    </div>
+                    <button type="button" class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        EN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full bg-gradient-to-b from-gray-50 to-gray-200 overflow-hidden">
+        <!-- Full-width hero container -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-stretch min-h-[85vh]">
+                
+                <!-- Left Column (40%): Mascot -->
+                <div class="w-full lg:w-[40%] flex flex-col justify-end pt-10 pb-8 relative">
+                    <!-- Mascot image anchored to the bottom but raised higher -->
+                    <img src="{% static 'images/GooseForMainPage.png' %}" 
+                         alt="Martin Star Mascot" 
+                         class="w-full h-auto object-bottom object-contain z-10 origin-bottom scale-110 lg:scale-125 transform -translate-y-8 lg:-translate-y-12 lg:translate-x-8">
+                </div>
+
+                <!-- Right Column (60%): Category Grid -->
+                <div class="w-full lg:w-[60%] lg:pl-16 pt-10 pb-16 z-20 self-start">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 lg:gap-8">
+                        {% for category in categories %}
+                        <a href="#" class="category-card flex flex-col items-center bg-white rounded-3xl p-6 shadow-md transition-all duration-300">
+                            <div class="w-24 h-24 mb-4 rounded-full overflow-hidden flex items-center justify-center bg-gray-100">
+                                {% if category.image %}
+                                    <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <span class="text-gray-400 text-sm">{% trans "No image" %}</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 text-center">{{ category.name }}</h3>
+                        </a>
+                        {% empty %}
+                        <div class="col-span-full text-center py-10">
+                            <p class="text-gray-500 text-lg">{% trans "No categories found." %}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Support Widget -->
+    <button class="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-xl hover:shadow-2xl transform hover:scale-110 transition-all duration-300 z-50 focus:outline-none focus:ring-4 focus:ring-red-300 flex items-center justify-center">
+        <!-- SVG Chat Bubble Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+    </button>
+
+</body>
+</html>
