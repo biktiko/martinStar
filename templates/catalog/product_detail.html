@@ -124,14 +124,17 @@
                             </div>
                             {% endif %}
                             
-                            {% if product.min_storage_temp or product.max_storage_temp %}
-                            <div class="flex justify-between py-1 border-b border-gray-50">
-                                <span class="text-gray-500 text-xs">{% trans "Storage Temp" %}</span>
-                                <span class="text-gray-900 font-medium text-xs text-right">
-                                    {% if product.min_storage_temp %}{{ product.min_storage_temp }}°C{% endif %}
-                                    {% if product.min_storage_temp and product.max_storage_temp %} - {% endif %}
-                                    {% if product.max_storage_temp %}{{ product.max_storage_temp }}°C{% endif %}
-                                </span>
+                            {% if product.min_storage_temp is not None %}
+                            <div class="flex justify-between items-center py-1 border-b border-gray-50 gap-2">
+                                <span class="text-gray-500 text-[10px] leading-tight" title="{% trans 'Minimum storage temperature' %}">{% trans "Minimum storage temperature" %}</span>
+                                <span class="text-gray-900 font-medium text-xs text-right whitespace-nowrap">{{ product.min_storage_temp }}°C</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if product.max_storage_temp is not None %}
+                            <div class="flex justify-between items-center py-1 border-b border-gray-50 gap-2">
+                                <span class="text-gray-500 text-[10px] leading-tight" title="{% trans 'Maximum storage temperature' %}">{% trans "Maximum storage temperature" %}</span>
+                                <span class="text-gray-900 font-medium text-xs text-right whitespace-nowrap">{{ product.max_storage_temp }}°C</span>
                             </div>
                             {% endif %}
                             
