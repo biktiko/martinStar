@@ -1,0 +1,222 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Martin Star</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{% url 'index' %}">
+                        <img class="h-10 w-auto" src="{% static 'images/logo.png' %}" alt="Martin Star">
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="{% url 'index' %}" class="text-gray-500 hover:text-red-600 font-medium transition-colors">{% trans "Home" %}</a>
+                    <a href="{% url 'category_products' category.slug %}" class="text-red-600 font-medium">{% trans "Catalog" %}</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex mb-4 text-sm font-medium text-gray-500" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'index' %}" class="hover:text-red-600 transition-colors">{% trans "Home" %}</a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                        <a href="{% url 'category_products' category.slug %}" class="hover:text-red-600 transition-colors">{{ category.name }}</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                        <span class="text-gray-400 ml-1 md:ml-2">{{ product.name }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="flex flex-col lg:flex-row">
+                
+                <!-- Product Image -->
+                <div class="w-full lg:w-1/2 p-4 lg:p-6 bg-gray-50 flex items-center justify-center relative">
+                    {% if product.image or product.options.first.image %}
+                        <img id="main-image" src="{% if product.options.first.image %}{{ product.options.first.image.url }}{% else %}{{ product.image.url }}{% endif %}" alt="{{ product.name }}" class="max-w-full max-h-[280px] lg:max-h-[350px] object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500">
+                    {% else %}
+                        <div class="text-gray-300 font-medium">{% trans "No Image Available" %}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Product Details -->
+                <div class="w-full lg:w-1/2 p-4 lg:p-6">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 leading-tight">{{ product.name }}</h1>
+                    
+                    {% if product.description %}
+                    <p class="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-3 hover:line-clamp-none transition-all">{{ product.description }}</p>
+                    {% endif %}
+
+                    <!-- Options Buttons -->
+                    {% if product.options.all %}
+                    <div class="mb-4">
+                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{% trans "Select Weight" %}</h3>
+                        <div class="flex flex-wrap gap-2">
+                            {% for option in product.options.all %}
+                            <button 
+                                class="option-btn px-4 py-1.5 text-sm rounded-lg border-2 border-gray-200 text-gray-700 font-bold hover:border-red-300 transition-all focus:outline-none"
+                                data-image="{% if option.image %}{{ option.image.url }}{% elif product.image %}{{ product.image.url }}{% endif %}"
+                                data-barcode="{{ option.barcode|default:'-' }}"
+                                data-dimensions="{% if option.box_dimensions %}{{ option.box_dimensions }} {{ option.get_box_dimensions_unit_display }}{% else %}-{% endif %}"
+                                data-packing="{% if option.packing_options %}{{ option.formatted_packing }}{% else %}-{% endif %}"
+                            >
+                                {{ option.weight|floatformat:0 }} {% trans "g" %}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Technical Specifications Table -->
+                    <div class="mt-4 border-t border-gray-100 pt-4">
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% trans "Specifications" %}</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+                            
+                            <!-- Logistics (Dynamic) -->
+                            <div class="flex justify-between py-1 border-b border-gray-50">
+                                <span class="text-gray-500 text-xs">{% trans "Barcode" %}</span>
+                                <span id="val-barcode" class="text-gray-900 font-medium text-xs text-right">-</span>
+                            </div>
+                            
+                            <div class="flex justify-between py-1 border-b border-gray-50">
+                                <span class="text-gray-500 text-xs">{% trans "Box Dimensions" %}</span>
+                                <span id="val-dimensions" class="text-gray-900 font-medium text-xs text-right">-</span>
+                            </div>
+
+                            <div class="flex justify-between py-1 border-b border-gray-50">
+                                <span class="text-gray-500 text-xs">{% trans "Packing" %}</span>
+                                <span id="val-packing" class="text-gray-900 font-medium text-xs text-right">-</span>
+                            </div>
+
+                            <!-- Storage (Static) -->
+                            {% if product.storage_period_days %}
+                            <div class="flex justify-between py-1 border-b border-gray-50">
+                                <span class="text-gray-500 text-xs">{% trans "Shelf Life" %}</span>
+                                <span class="text-gray-900 font-medium text-xs text-right">{{ product.storage_period_days }} {% trans "days" %}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if product.min_storage_temp or product.max_storage_temp %}
+                            <div class="flex justify-between py-1 border-b border-gray-50">
+                                <span class="text-gray-500 text-xs">{% trans "Storage Temp" %}</span>
+                                <span class="text-gray-900 font-medium text-xs text-right">
+                                    {% if product.min_storage_temp %}{{ product.min_storage_temp }}°C{% endif %}
+                                    {% if product.min_storage_temp and product.max_storage_temp %} - {% endif %}
+                                    {% if product.max_storage_temp %}{{ product.max_storage_temp }}°C{% endif %}
+                                </span>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+
+                    <!-- Nutrition Information -->
+                    {% if product.calories or product.proteins or product.fats or product.carbohydrates %}
+                    <div class="mt-4 border-t border-gray-100 pt-4">
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% trans "Nutrition Value" %}</h2>
+
+                        <div class="bg-gray-50 rounded-xl p-3">
+                            <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">{% trans "Nutritional Value per 100g" %}</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                                {% if product.calories %}
+                                <div>
+                                    <div class="text-gray-900 font-bold text-sm">{{ product.calories }}</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Energy" %}</div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if product.proteins %}
+                                <div>
+                                    <div class="text-gray-900 font-bold text-sm">{{ product.proteins }}g</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Proteins" %}</div>
+                                </div>
+                                {% endif %}
+
+                                {% if product.fats %}
+                                <div>
+                                    <div class="text-gray-900 font-bold text-sm">{{ product.fats }}g</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Fats" %}</div>
+                                </div>
+                                {% endif %}
+
+                                {% if product.carbohydrates %}
+                                <div>
+                                    <div class="text-gray-900 font-bold text-sm">{{ product.carbohydrates }}g</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Carbs" %}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script for Dynamic Option Switching -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const optionBtns = document.querySelectorAll('.option-btn');
+            if(optionBtns.length === 0) return;
+
+            const mainImage = document.getElementById('main-image');
+            const barcodeEl = document.getElementById('val-barcode');
+            const dimensionsEl = document.getElementById('val-dimensions');
+            const packingEl = document.getElementById('val-packing');
+
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state classes
+                    optionBtns.forEach(b => b.classList.remove('ring-4', 'ring-red-100', 'border-red-600', 'bg-red-50', 'text-red-700'));
+                    optionBtns.forEach(b => b.classList.add('border-gray-200', 'hover:border-red-300', 'text-gray-700'));
+                    
+                    btn.classList.remove('border-gray-200', 'hover:border-red-300', 'text-gray-700');
+                    btn.classList.add('ring-4', 'ring-red-100', 'border-red-600', 'bg-red-50', 'text-red-700');
+
+                    // Update contents
+                    if(mainImage && btn.dataset.image) {
+                        mainImage.src = btn.dataset.image;
+                    }
+                    if(barcodeEl) barcodeEl.textContent = btn.dataset.barcode;
+                    if(dimensionsEl) dimensionsEl.textContent = btn.dataset.dimensions;
+                    if(packingEl) packingEl.textContent = btn.dataset.packing;
+                });
+            });
+
+            // Trigger click on first option to initialize
+            optionBtns[0].click();
+        });
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from apps.core.views import index
+from apps.catalog.views import category_products_view, product_detail_view
 
 urlpatterns = [
     # Non-translatable URLs can go here
@@ -16,5 +17,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('category/<slug:category_slug>/', category_products_view, name='category_products'),
+    path('category/<slug:category_slug>/<slug:product_slug>/', product_detail_view, name='product_detail'),
     prefix_default_language=False, # Don't add /hy/ for the default language
 )

@@ -74,7 +74,7 @@
                 <div class="w-full lg:w-[60%] lg:pl-16 pt-10 pb-16 z-20 self-start">
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 lg:gap-8">
                         {% for category in categories %}
-                        <a href="#" class="category-card flex flex-col items-center bg-white rounded-3xl p-6 shadow-md transition-all duration-300">
+                        <a href="{% url 'category_products' category.slug %}" class="category-card flex flex-col items-center bg-white rounded-3xl p-6 shadow-md transition-all duration-300">
                             <div class="w-24 h-24 mb-4 rounded-full overflow-hidden flex items-center justify-center bg-gray-100">
                                 {% if category.image %}
                                     <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full h-full object-cover">

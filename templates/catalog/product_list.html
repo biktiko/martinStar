@@ -1,0 +1,141 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} - Martin Star</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{% url 'index' %}">
+                        <img class="h-10 w-auto" src="{% static 'images/logo.png' %}" alt="Martin Star">
+                    </a>
+                </div>
+                <!-- Simple Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="{% url 'index' %}" class="text-gray-500 hover:text-red-600 font-medium transition-colors">{% trans "Home" %}</a>
+                    <a href="#" class="text-red-600 font-medium">{% trans "Catalog" %}</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+        
+        <!-- Left Sidebar (Categories) -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="bg-white rounded-3xl p-6 shadow-sm sticky top-24 border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">{% trans "Categories" %}</h3>
+                <nav class="space-y-2">
+                    {% for cat in categories %}
+                    <a href="{% url 'category_products' cat.slug %}" 
+                       class="block px-4 py-3 rounded-xl transition-all {% if cat.id == category.id %}bg-red-50 text-red-700 font-semibold shadow-inner{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900{% endif %}">
+                        {{ cat.name }}
+                    </a>
+                    {% endfor %}
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 tracking-tight">{{ category.name }}</h1>
+                {% if category.description %}
+                <p class="mt-3 text-gray-500 text-lg max-w-3xl">{{ category.description }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Brand Filters -->
+            {% if brands %}
+            <div class="mb-10">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{% trans "Filter by Brand" %}</h2>
+                <div class="flex flex-wrap gap-4">
+                    <!-- All Brands Button -->
+                    <a href="{% url 'category_products' category.slug %}" 
+                       class="h-16 px-6 bg-white rounded-2xl shadow-sm flex items-center justify-center transition-all hover:shadow-md border-2 {% if not selected_brand %}border-red-600 ring-4 ring-red-50{% else %}border-transparent hover:border-gray-200{% endif %}">
+                        <span class="font-semibold {% if not selected_brand %}text-red-600{% else %}text-gray-500{% endif %}">{% trans "All Brands" %}</span>
+                    </a>
+                    
+                    <!-- Individual Brands -->
+                    {% for brand in brands %}
+                    <a href="?brand={{ brand.slug }}" 
+                       class="h-16 min-w-[120px] px-6 bg-white rounded-2xl shadow-sm flex items-center justify-center transition-all hover:shadow-md border-2 {% if selected_brand == brand.slug %}border-red-600 ring-4 ring-red-50{% else %}border-transparent hover:border-gray-200{% endif %}">
+                        {% if brand.logo %}
+                            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="max-h-10 max-w-full object-contain">
+                        {% else %}
+                            <!-- Fallback mapping based on name -->
+                            {% if brand.name|lower == 'martin' %}
+                                <img src="{% static 'images/logo.png' %}" alt="Martin" class="max-h-10 max-w-full object-contain">
+                            {% elif brand.name|lower == 'antari' %}
+                                <img src="{% static 'images/antariLogo.png' %}" alt="Antari" class="max-h-10 max-w-full object-contain">
+                            {% else %}
+                                <span class="font-semibold {% if selected_brand == brand.slug %}text-red-600{% else %}text-gray-700{% endif %}">{{ brand.name }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Products Grid -->
+            {% if products %}
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {% for product in products %}
+                <a href="{% url 'product_detail' category.slug product.slug %}" class="bg-white rounded-3xl p-6 flex flex-col items-center justify-between text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group cursor-pointer">
+                    <div class="w-full aspect-square mb-6 relative">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="absolute inset-0 w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out">
+                        {% else %}
+                        <div class="absolute inset-0 bg-gray-50 rounded-2xl flex items-center justify-center">
+                            <span class="text-gray-300 font-medium">{% trans "No Image" %}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mt-auto w-full">
+                        {% if product.brand %}
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{{ product.brand.name }}</p>
+                        {% endif %}
+                        <h3 class="text-gray-800 font-bold leading-snug group-hover:text-red-600 transition-colors">{{ product.name }}</h3>
+                        {% if product.options.all %}
+                        <div class="mt-3 flex flex-wrap justify-center gap-1">
+                            {% for option in product.options.all %}
+                                <span class="text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-1 rounded-md">{{ option.weight|floatformat:0 }} г</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-white rounded-3xl p-16 text-center shadow-sm border border-gray-100">
+                <div class="text-gray-300 mb-6 flex justify-center">
+                    <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">{% trans "No products found" %}</h3>
+                <p class="text-gray-500">{% trans "Try selecting a different brand or category." %}</p>
+            </div>
+            {% endif %}
+
+        </main>
+    </div>
+</body>
+</html>
