@@ -8,6 +8,9 @@ class CategoryAdmin(ModelAdmin, TranslationAdmin):
     list_display = ('name', 'slug', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
+    # Can also define fieldsets or just fields
+    fields = ('name', 'slug', 'description', 'icon', 'image', 'is_active', 'brands', 'meta_title', 'meta_description')
+    filter_horizontal = ('brands',)
 
 class ProductOptionInline(TabularInline):
     model = ProductOption

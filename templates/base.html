@@ -1,0 +1,68 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Martin Star - Otmartina{% endblock %}</title>
+    <!-- Tailwind CSS CDN for rapid prototyping -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_head %}
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    {% endblock %}
+</head>
+<body class="text-gray-800 font-sans antialiased min-h-screen flex flex-col bg-gray-50 relative">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Left: Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{% url 'index' %}">
+                        <img class="h-12 w-auto object-contain" src="{% static 'images/logo.png' %}" alt="Martin Star Logo">
+                    </a>
+                </div>
+
+                <!-- Center: Navigation -->
+                <nav class="hidden lg:flex space-x-8">
+                    <a href="{% url 'index' %}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Home" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "About us" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Products" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Careers" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Contacts" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Online store" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Blog" %}</a>
+                </nav>
+
+                <!-- Right: Search & Language -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden sm:block">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% trans 'Search products...' %}">
+                    </div>
+                    <button type="button" class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        EN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full overflow-hidden">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

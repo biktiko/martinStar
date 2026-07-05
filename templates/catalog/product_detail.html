@@ -1,35 +1,9 @@
+{% extends 'base.html' %}
 {% load static i18n %}
-<!DOCTYPE html>
-<html lang="{{ request.LANGUAGE_CODE }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} - Martin Star</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
-    </style>
-</head>
-<body class="text-gray-800 antialiased">
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{% url 'index' %}">
-                        <img class="h-10 w-auto" src="{% static 'images/logo.png' %}" alt="Martin Star">
-                    </a>
-                </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="{% url 'index' %}" class="text-gray-500 hover:text-red-600 font-medium transition-colors">{% trans "Home" %}</a>
-                    <a href="{% url 'category_products' category.slug %}" class="text-red-600 font-medium">{% trans "Catalog" %}</a>
-                </nav>
-            </div>
-        </div>
-    </header>
+
+{% block title %}{{ product.name }} - Martin Star{% endblock %}
+
+{% block content %}
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         
@@ -186,7 +160,9 @@
         </div>
 
     </div>
+{% endblock %}
 
+{% block extra_scripts %}
     <!-- Script for Dynamic Option Switching -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -221,5 +197,4 @@
             optionBtns[0].click();
         });
     </script>
-</body>
-</html>
+{% endblock %}

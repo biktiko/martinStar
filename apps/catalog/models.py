@@ -8,6 +8,8 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, max_length=255)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+    brands = models.ManyToManyField('Brand', related_name='categories', blank=True)
+    icon = models.ImageField(upload_to='categories/icons/', null=True, blank=True)
     image = models.ImageField(upload_to='categories/', null=True, blank=True)
     
     # SEO fields
