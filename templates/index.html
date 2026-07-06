@@ -14,7 +14,13 @@
             {% for banner in mobile_banners %}
                 {% if banner.image %}
                 <div class="banner-slide flex-none w-full snap-center relative">
-                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                    {% if banner.banner_link %}
+                    <a href="{{ banner.banner_link }}" class="block w-full h-full">
+                    {% endif %}
+                        <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                    {% if banner.banner_link %}
+                    </a>
+                    {% endif %}
                 </div>
                 {% endif %}
             {% endfor %}
@@ -40,7 +46,13 @@
             {% for banner in desktop_banners %}
                 {% if banner.image %}
                 <div class="banner-slide flex-none w-full snap-center relative">
-                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                    {% if banner.banner_link %}
+                    <a href="{{ banner.banner_link }}" class="block w-full h-full">
+                    {% endif %}
+                        <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                    {% if banner.banner_link %}
+                    </a>
+                    {% endif %}
                 </div>
                 {% endif %}
             {% endfor %}

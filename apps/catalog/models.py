@@ -147,6 +147,7 @@ class ProductOption(models.Model):
 class HeroBanner(models.Model):
     title = models.CharField(max_length=255, blank=True, help_text="Internal title for admin panel")
     image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Banner image")
+    banner_link = models.URLField(blank=True, help_text="Optional link when clicking the banner")
     is_active = models.BooleanField(default=True)
     show_on_mobile = models.BooleanField(default=True, help_text="Show this banner on mobile devices")
     show_on_desktop = models.BooleanField(default=False, help_text="Show this banner on PC/large screens")
