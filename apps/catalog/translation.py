@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Category, Product
+from .models import Category, Product, HeroBanner
 
 @register(Category)
 class CategoryTranslationOptions(TranslationOptions):
@@ -11,3 +11,7 @@ class ProductTranslationOptions(TranslationOptions):
         'name', 'description', 
         'meta_title', 'meta_description'
     )
+
+@register(HeroBanner)
+class HeroBannerTranslationOptions(TranslationOptions):
+    fields = ('image',)

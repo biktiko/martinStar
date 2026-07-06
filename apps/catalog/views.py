@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
 from .models import Category, Product, Brand
 
+@cache_page(60 * 15)
 def category_products_view(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     categories = Category.objects.filter(is_active=True)
@@ -24,6 +26,7 @@ def category_products_view(request, category_slug):
     }
     return render(request, 'catalog/product_list.html', context)
 
+@cache_page(60 * 15)
 def product_detail_view(request, category_slug, product_slug):
     category = get_object_or_404(Category, slug=category_slug, is_active=True)
     product = get_object_or_404(Product.objects.prefetch_related('options'), slug=product_slug, category=category, is_active=True)

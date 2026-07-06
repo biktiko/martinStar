@@ -15,7 +15,7 @@ class CategoryAdmin(ModelAdmin, TranslationAdmin):
 class ProductOptionInline(TabularInline):
     model = ProductOption
     extra = 1
-    fields = ('weight', 'barcode', 'box_dimensions', 'box_dimensions_unit', 'packing_options', 'packing_options_unit', 'image', 'is_active')
+    fields = ('weight', 'barcode', 'box_dimensions', 'box_dimensions_unit', 'packing_options', 'image', 'is_active')
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin, TranslationAdmin):
@@ -48,7 +48,7 @@ class BrandAdmin(ModelAdmin):
     search_fields = ('name',)
 
 @admin.register(HeroBanner)
-class HeroBannerAdmin(ModelAdmin):
-    list_display = ('title', 'is_active', 'order')
-    list_editable = ('is_active', 'order')
+class HeroBannerAdmin(ModelAdmin, TranslationAdmin):
+    list_display = ('title', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order')
+    list_editable = ('is_active', 'show_on_mobile', 'show_on_desktop', 'order')
     search_fields = ('title',)

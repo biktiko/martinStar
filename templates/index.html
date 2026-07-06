@@ -7,14 +7,63 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Mobile Banner (lg:hidden) -->
-    {% if banner and banner.hero_banner_mobile %}
-    <div class="lg:hidden w-full pt-4">
-        <div class="rounded-2xl mx-4 overflow-hidden shadow-sm">
-            {% if banner.banner_link %}<a href="{{ banner.banner_link }}">{% endif %}
-            <img src="{{ banner.hero_banner_mobile.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
-            {% if banner.banner_link %}</a>{% endif %}
+    <!-- Mobile Banner Carousel -->
+    {% if mobile_banners %}
+    <div class="w-full pt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:hidden relative group banner-carousel-container">
+        <div class="banner-carousel flex overflow-x-auto snap-x snap-mandatory scrollbar-none rounded-2xl shadow-sm relative" style="-ms-overflow-style: none; scrollbar-width: none;">
+            {% for banner in mobile_banners %}
+                {% if banner.image %}
+                <div class="banner-slide flex-none w-full snap-center relative">
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
+        
+        {% if mobile_banners|length > 1 %}
+        <!-- Pagination Dots -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 banner-dots-container">
+            {% for banner in mobile_banners %}
+                {% if banner.image %}
+                <button class="banner-dot rounded-full transition-all duration-300 {% if forloop.first %}bg-red-600 w-6 h-2{% else %}bg-white/60 hover:bg-white/90 w-2 h-2{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="Slide {{ forloop.counter }}"></button>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Desktop Banner Carousel -->
+    {% if desktop_banners %}
+    <div class="hidden lg:block w-full pt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative group banner-carousel-container">
+        <div class="banner-carousel flex overflow-x-auto snap-x snap-mandatory scrollbar-none rounded-2xl shadow-sm relative" style="-ms-overflow-style: none; scrollbar-width: none;">
+            {% for banner in desktop_banners %}
+                {% if banner.image %}
+                <div class="banner-slide flex-none w-full snap-center relative">
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        {% if desktop_banners|length > 1 %}
+        <!-- Navigation Arrows -->
+        <button class="banner-prev absolute left-6 lg:left-8 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10" aria-label="Previous">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <button class="banner-next absolute right-6 lg:right-8 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10" aria-label="Next">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+        
+        <!-- Pagination Dots -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 banner-dots-container">
+            {% for banner in desktop_banners %}
+                {% if banner.image %}
+                <button class="banner-dot rounded-full transition-all duration-300 {% if forloop.first %}bg-red-600 w-6 h-2{% else %}bg-white/60 hover:bg-white/90 w-2 h-2{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="Slide {{ forloop.counter }}"></button>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -98,11 +147,11 @@
                         {% for category in categories %}
                             {% if settings.mobile_grid_layout == '1x2' %}
                                 {% if forloop.counter0|divisibleby:2 %}
-                                <div class="grid grid-cols-2 grid-rows-1 gap-3 min-w-[calc(100vw-2rem)] snap-center">
+                                <div class="grid grid-cols-2 grid-rows-1 gap-3 min-w-[calc(100vw-2rem)] snap-center snap-always">
                                 {% endif %}
                             {% else %}
                                 {% if forloop.counter0|divisibleby:4 %}
-                                <div class="grid grid-cols-2 grid-rows-2 gap-3 min-w-[calc(100vw-2rem)] snap-center">
+                                <div class="grid grid-cols-2 grid-rows-2 gap-3 min-w-[calc(100vw-2rem)] snap-center snap-always">
                                 {% endif %}
                             {% endif %}
                                 <a href="{% url 'category_products' category.slug %}" class="bg-white rounded-2xl p-3 flex flex-col items-center justify-center border border-gray-100 shadow-sm overflow-hidden">
@@ -185,25 +234,88 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
     </button>
+{% endblock %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.querySelector('.overflow-x-auto');
-            const dots = document.querySelectorAll('#carousel-dots button');
-            if (carousel && dots.length > 0) {
-                carousel.addEventListener('scroll', () => {
-                    const pageIndex = Math.round(carousel.scrollLeft / carousel.clientWidth);
-                    dots.forEach((dot, idx) => {
-                        if (idx === pageIndex) {
-                            dot.classList.remove('bg-gray-300', 'w-2');
-                            dot.classList.add('bg-red-600', 'w-4');
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Banner Carousel Logic
+        const carouselContainers = document.querySelectorAll('.banner-carousel-container');
+        
+        carouselContainers.forEach(container => {
+            const carousel = container.querySelector('.banner-carousel');
+            const prevBtn = container.querySelector('.banner-prev');
+            const nextBtn = container.querySelector('.banner-next');
+            const dots = container.querySelectorAll('.banner-dot');
+            const slides = container.querySelectorAll('.banner-slide');
+            
+            if (carousel && slides.length > 1) {
+                const updateDots = (index) => {
+                    dots.forEach((dot, i) => {
+                        if (i === index) {
+                            dot.classList.replace('bg-white/60', 'bg-red-600');
+                            dot.classList.replace('hover:bg-white/90', 'w-6');
+                            dot.classList.remove('w-2');
                         } else {
-                            dot.classList.remove('bg-red-600', 'w-4');
-                            dot.classList.add('bg-gray-300', 'w-2');
+                            dot.classList.replace('bg-red-600', 'bg-white/60');
+                            dot.classList.add('hover:bg-white/90', 'w-2');
+                            dot.classList.remove('w-6');
                         }
                     });
+                };
+
+                // Arrow Clicks
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+                    });
+                }
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+                    });
+                }
+
+                // Dot Clicks
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        carousel.scrollTo({
+                            left: slides[index].offsetLeft - carousel.offsetLeft,
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+
+                // Update dots on scroll
+                let scrollTimeout;
+                carousel.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        let index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+                        updateDots(index);
+                    }, 50);
                 });
             }
         });
-    </script>
+        
+        // Category Carousel Logic
+        const nav = document.getElementById('cat-carousel');
+        const dots = document.querySelectorAll('#carousel-dots button');
+        
+        if (nav && dots.length > 0) {
+            nav.addEventListener('scroll', () => {
+                let index = Math.round(nav.scrollLeft / nav.clientWidth);
+                dots.forEach((dot, i) => {
+                    if (i === index) {
+                        dot.classList.add('bg-red-600', 'w-4');
+                        dot.classList.remove('bg-gray-300', 'w-2');
+                    } else {
+                        dot.classList.add('bg-gray-300', 'w-2');
+                        dot.classList.remove('bg-red-600', 'w-4');
+                    }
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

@@ -98,19 +98,11 @@ class ProductOption(models.Model):
         MM = 'mm', _('mm')
         CM = 'cm', _('cm')
 
-    class PackingUnit(models.TextChoices):
-        G_PCS = 'g/pcs', _('g / pcs')
-        KG_PCS = 'kg/pcs', _('kg / pcs')
-        ML_PCS = 'ml/pcs', _('ml / pcs')
-        L_PCS = 'l/pcs', _('l / pcs')
-        PCS = 'pcs', _('pcs')
-
     weight = models.DecimalField(max_digits=10, decimal_places=2, help_text="Weight in grams")
     barcode = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    box_dimensions = models.CharField(max_length=100, blank=True, help_text="e.g., 285x315x235")
+    box_dimensions = models.CharField(max_length=100, blank=True, help_text="L x W x H (e.g., 285x315x235)")
     box_dimensions_unit = models.CharField(max_length=10, choices=BoxDimensionUnit.choices, default=BoxDimensionUnit.MM)
-    packing_options = models.CharField(max_length=100, blank=True, help_text="e.g., 100/50")
-    packing_options_unit = models.CharField(max_length=10, choices=PackingUnit.choices, default=PackingUnit.G_PCS)
+    packing_options = models.CharField(max_length=100, blank=True, help_text="Enter quantity in box (e.g., 50). System will auto-prepend weight (e.g., 100g/50pcs).")
     
     image = models.ImageField(upload_to='products/options/', null=True, blank=True, help_text="Specific photo for this variant. Leave blank to use main product photo.")
     is_active = models.BooleanField(default=True)
@@ -129,15 +121,16 @@ class ProductOption(models.Model):
             return ""
         
         val = self.packing_options.strip()
-        if '/' in val and '/' in self.packing_options_unit:
+        weight_str = f"{float(self.weight):g}"
+        
+        if '/' in val:
+            # Legacy format (e.g. 100/50)
             val_parts = [p.strip() for p in val.split('/', 1)]
             if len(val_parts) == 2:
-                unit_str = str(dict(self.PackingUnit.choices).get(self.packing_options_unit, self.packing_options_unit))
-                unit_parts = [p.strip() for p in unit_str.split('/', 1)]
-                if len(unit_parts) == 2:
-                    return f"{val_parts[0]}{unit_parts[0]}/{val_parts[1]}{unit_parts[1]}"
-        
-        return f"{self.packing_options} {self.get_packing_options_unit_display()}"
+                return f"{val_parts[0]}g/{val_parts[1]}pcs"
+                
+        # New format (e.g. 50) -> pulls weight automatically
+        return f"{weight_str}g/{val}pcs"
 
     def clean(self):
         super().clean()
@@ -153,10 +146,10 @@ class ProductOption(models.Model):
 
 class HeroBanner(models.Model):
     title = models.CharField(max_length=255, blank=True, help_text="Internal title for admin panel")
-    hero_banner_desktop = models.ImageField(upload_to='banners/', help_text="Wide format for desktop screens")
-    hero_banner_mobile = models.ImageField(upload_to='banners/', help_text="Compact/vertical format for mobile screens")
-    banner_link = models.URLField(blank=True)
+    image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Banner image")
     is_active = models.BooleanField(default=True)
+    show_on_mobile = models.BooleanField(default=True, help_text="Show this banner on mobile devices")
+    show_on_desktop = models.BooleanField(default=False, help_text="Show this banner on PC/large screens")
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -168,8 +161,6 @@ class HeroBanner(models.Model):
         return self.title or f"Banner {self.id}"
 
     def save(self, *args, **kwargs):
-        if self.hero_banner_desktop and not self.hero_banner_desktop.name.lower().endswith('.webp'):
-            self.hero_banner_desktop = optimize_image(self.hero_banner_desktop)
-        if self.hero_banner_mobile and not self.hero_banner_mobile.name.lower().endswith('.webp'):
-            self.hero_banner_mobile = optimize_image(self.hero_banner_mobile)
+        if self.image and not self.image.name.lower().endswith('.webp'):
+            self.image = optimize_image(self.image)
         super().save(*args, **kwargs)

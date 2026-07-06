@@ -11,6 +11,7 @@ from apps.core.views import index
 from apps.catalog.views import category_products_view, product_detail_view
 
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
     # Non-translatable URLs can go here
 ]
 
