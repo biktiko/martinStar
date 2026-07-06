@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from modeltranslation.admin import TranslationAdmin
-from .models import Category, Product, Brand, ProductOption
+from .models import Category, Product, Brand, ProductOption, HeroBanner
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin, TranslationAdmin):
@@ -46,3 +46,9 @@ class BrandAdmin(ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
+
+@admin.register(HeroBanner)
+class HeroBannerAdmin(ModelAdmin):
+    list_display = ('title', 'is_active', 'order')
+    list_editable = ('is_active', 'order')
+    search_fields = ('title',)

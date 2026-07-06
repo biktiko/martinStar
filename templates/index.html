@@ -7,13 +7,24 @@
 {% endblock %}
 
 {% block content %}
+    <!-- Mobile Banner (lg:hidden) -->
+    {% if banner and banner.hero_banner_mobile %}
+    <div class="lg:hidden w-full pt-4">
+        <div class="rounded-2xl mx-4 overflow-hidden shadow-sm">
+            {% if banner.banner_link %}<a href="{{ banner.banner_link }}">{% endif %}
+            <img src="{{ banner.hero_banner_mobile.url }}" alt="{{ banner.title|default:'Banner' }}" class="w-full h-auto object-cover">
+            {% if banner.banner_link %}</a>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+
     <div class="bg-gradient-to-b from-gray-50 to-gray-200">
         <!-- Full-width hero container -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-stretch min-h-[calc(100vh-5rem)]">
                 
                 <!-- Left Column (40%): Mascot -->
-                <div class="w-full lg:w-[40%] flex flex-col justify-end pt-10 relative">
+                <div class="hidden lg:flex w-full lg:w-[40%] flex-col justify-end pt-10 relative">
                     <!-- Mascot image anchored to the bottom -->
                     <img src="{% static 'images/GooseForMainPage.png' %}" 
                          alt="Martin Star Mascot" 
@@ -27,11 +38,11 @@
                     <div class="mb-6 flex flex-col items-center justify-center w-full">
                         
                         <!-- Solid Centered Title -->
-                        <h2 class="text-4xl md:text-5xl font-extrabold text-red-700 uppercase tracking-wider text-center">{% trans "Our Products" %}</h2>
+                        <h2 class="text-center text-2xl font-bold text-red-600 uppercase tracking-wider mb-4">{% trans "Our Products" %}</h2>
 
                         <!-- Brand Filter Group -->
                         {% if brands %}
-                        <div class="flex items-center justify-center gap-8 mt-4 mb-4">
+                        <div class="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 mt-4 mb-4">
                             {% for brand in brands %}
                                 {% if not selected_brands or brand.slug in selected_brands %}
                                     <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-100 scale-105 drop-shadow-md transition-all duration-300 cursor-pointer" title="{% trans 'Toggle filter' %}">
@@ -39,12 +50,12 @@
                                     <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer" title="{% trans 'Toggle filter' %}">
                                 {% endif %}
                                     {% if brand.logo %}
-                                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-16 w-auto object-contain">
+                                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 sm:h-14 lg:h-16 w-auto object-contain">
                                     {% else %}
                                         {% if brand.name|lower == 'martin' %}
-                                            <img src="{% static 'images/logo.png' %}" alt="Martin" class="h-16 w-auto object-contain">
+                                            <img src="{% static 'images/logo.png' %}" alt="Martin" class="h-10 sm:h-14 lg:h-16 w-auto object-contain">
                                         {% elif brand.name|lower == 'antari' %}
-                                            <img src="{% static 'images/antariLogo.png' %}" alt="Antari" class="h-16 w-auto object-contain">
+                                            <img src="{% static 'images/antariLogo.png' %}" alt="Antari" class="h-10 sm:h-14 lg:h-16 w-auto object-contain">
                                         {% else %}
                                             <span class="font-bold text-sm px-3 text-gray-800">{{ brand.name }}</span>
                                         {% endif %}
@@ -79,7 +90,64 @@
                         }
                     </script>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 lg:gap-8 items-start content-start">
+                    <!-- Mobile Viewport Carousel (lg:hidden) -->
+                    <div class="lg:hidden flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-4 px-4 pb-4 -mx-4" style="-ms-overflow-style: none; scrollbar-width: none;">
+                        <style>
+                            .scrollbar-none::-webkit-scrollbar { display: none; }
+                        </style>
+                        {% for category in categories %}
+                            {% if settings.mobile_grid_layout == '1x2' %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                <div class="grid grid-cols-2 grid-rows-1 gap-3 min-w-[calc(100vw-2rem)] snap-center">
+                                {% endif %}
+                            {% else %}
+                                {% if forloop.counter0|divisibleby:4 %}
+                                <div class="grid grid-cols-2 grid-rows-2 gap-3 min-w-[calc(100vw-2rem)] snap-center">
+                                {% endif %}
+                            {% endif %}
+                                <a href="{% url 'category_products' category.slug %}" class="bg-white rounded-2xl p-3 flex flex-col items-center justify-center border border-gray-100 shadow-sm overflow-hidden">
+                                    <div class="w-24 h-24 flex items-center justify-center bg-transparent relative mb-1">
+                                        {% if category.image %}
+                                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-contain p-1 mix-blend-multiply">
+                                        {% else %}
+                                            <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest text-center leading-tight">{% trans "No image" %}</span>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="text-sm font-semibold text-slate-800 mt-1 text-center leading-tight">{{ category.name }}</h3>
+                                </a>
+                            {% if settings.mobile_grid_layout == '1x2' %}
+                                {% if forloop.counter|divisibleby:2 or forloop.last %}
+                                </div>
+                                {% endif %}
+                            {% else %}
+                                {% if forloop.counter|divisibleby:4 or forloop.last %}
+                                </div>
+                                {% endif %}
+                            {% endif %}
+                        {% empty %}
+                            <div class="w-full text-center py-10 min-w-[calc(100vw-2rem)]">
+                                <p class="text-gray-500 text-lg">{% trans "No categories found." %}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Carousel Pagination Dots -->
+                    <div id="carousel-dots" class="flex justify-center items-center gap-2 mt-4 mb-4 lg:hidden">
+                        {% for category in categories %}
+                            {% if settings.mobile_grid_layout == '1x2' %}
+                                {% if forloop.counter0|divisibleby:2 %}
+                                    <button class="rounded-full transition-all duration-300 {% if forloop.first %}bg-red-600 w-4 h-2{% else %}bg-gray-300 w-2 h-2{% endif %}" aria-label="Slide"></button>
+                                {% endif %}
+                            {% else %}
+                                {% if forloop.counter0|divisibleby:4 %}
+                                    <button class="rounded-full transition-all duration-300 {% if forloop.first %}bg-red-600 w-4 h-2{% else %}bg-gray-300 w-2 h-2{% endif %}" aria-label="Slide"></button>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Desktop Viewport Grid (hidden lg:grid) -->
+                    <div class="hidden lg:grid grid-cols-3 gap-8 items-start content-start">
                         {% for category in categories %}
                         <a href="{% url 'category_products' category.slug %}" 
                            class="group flex flex-col items-center w-full bg-white/80 backdrop-blur-md rounded-3xl p-4 border border-gray-100 shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-gray-200/50 cursor-pointer overflow-hidden">
@@ -117,4 +185,25 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
     </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.overflow-x-auto');
+            const dots = document.querySelectorAll('#carousel-dots button');
+            if (carousel && dots.length > 0) {
+                carousel.addEventListener('scroll', () => {
+                    const pageIndex = Math.round(carousel.scrollLeft / carousel.clientWidth);
+                    dots.forEach((dot, idx) => {
+                        if (idx === pageIndex) {
+                            dot.classList.remove('bg-gray-300', 'w-2');
+                            dot.classList.add('bg-red-600', 'w-4');
+                        } else {
+                            dot.classList.remove('bg-red-600', 'w-4');
+                            dot.classList.add('bg-gray-300', 'w-2');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 {% endblock %}

@@ -150,3 +150,26 @@ class ProductOption(models.Model):
             if not self.image.name.lower().endswith('.webp'):
                 self.image = optimize_image(self.image)
         super().save(*args, **kwargs)
+
+class HeroBanner(models.Model):
+    title = models.CharField(max_length=255, blank=True, help_text="Internal title for admin panel")
+    hero_banner_desktop = models.ImageField(upload_to='banners/', help_text="Wide format for desktop screens")
+    hero_banner_mobile = models.ImageField(upload_to='banners/', help_text="Compact/vertical format for mobile screens")
+    banner_link = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Hero Banner'
+        verbose_name_plural = 'Hero Banners'
+        ordering = ['order', '-id']
+
+    def __str__(self):
+        return self.title or f"Banner {self.id}"
+
+    def save(self, *args, **kwargs):
+        if self.hero_banner_desktop and not self.hero_banner_desktop.name.lower().endswith('.webp'):
+            self.hero_banner_desktop = optimize_image(self.hero_banner_desktop)
+        if self.hero_banner_mobile and not self.hero_banner_mobile.name.lower().endswith('.webp'):
+            self.hero_banner_mobile = optimize_image(self.hero_banner_mobile)
+        super().save(*args, **kwargs)
