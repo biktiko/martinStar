@@ -1,0 +1,66 @@
+{% if banner %}
+<div class="relative w-full h-48 md:h-64 lg:h-[300px] overflow-hidden">
+    <style>
+        .banner-rich-text h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+        .banner-rich-text h2 { font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }
+        .banner-rich-text h3 { font-size: 1.75rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .banner-rich-text p { font-size: 1.125rem; line-height: 1.5; margin-bottom: 0.5rem; }
+        .banner-rich-text strong, .banner-rich-text b { font-weight: bold; }
+        .banner-rich-text em, .banner-rich-text i { font-style: italic; }
+        @media (max-width: 768px) {
+            .banner-rich-text h1 { font-size: 1.75rem; }
+            .banner-rich-text h2 { font-size: 1.5rem; }
+            .banner-rich-text h3 { font-size: 1.25rem; }
+            .banner-rich-text p { font-size: 1rem; }
+        }
+    </style>
+    <!-- Desktop Media Layer (Hidden on mobile) -->
+    <div class="hidden md:block w-full h-full">
+        {% if banner.video_file %}
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover pointer-events-none">
+                <source src="{{ banner.video_file.url }}" type="video/mp4">
+            </video>
+        {% elif banner.image %}
+            <img src="{{ banner.image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+        {% endif %}
+    </div>
+
+    <!-- Mobile Media Layer (Hidden on desktop) -->
+    <div class="block md:hidden w-full h-full">
+        {% if banner.video_file_mobile %}
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover pointer-events-none">
+                <source src="{{ banner.video_file_mobile.url }}" type="video/mp4">
+            </video>
+        {% elif banner.image_mobile %}
+            <img src="{{ banner.image_mobile.url }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+        {% elif banner.video_file %}
+            <!-- Fallback to desktop video -->
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover pointer-events-none">
+                <source src="{{ banner.video_file.url }}" type="video/mp4">
+            </video>
+        {% elif banner.image %}
+            <!-- Fallback to desktop image -->
+            <img src="{{ banner.image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+        {% endif %}
+    </div>
+
+    <!-- Overlay & Text Layer -->
+    {% if banner.show_text_overlay and banner.title %}
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center p-4">
+            <div class="text-center drop-shadow-md max-w-4xl banner-rich-text">
+                {{ banner.title|safe }}
+                
+                {% if banner.subtitle %}
+                    <div class="mt-2">{{ banner.subtitle|safe }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Optional Banner Link -->
+    {% if banner.banner_link %}
+        <a href="{{ banner.banner_link }}" class="absolute inset-0 z-10"></a>
+    {% endif %}
+</div>
+{% endif %}

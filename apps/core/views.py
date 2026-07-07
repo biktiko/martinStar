@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from apps.core.models import SiteSettings
 from apps.catalog.models import Category, Brand, HeroBanner
+from apps.blog.models import Post
 
 @cache_page(60 * 15)
 def index(request):
@@ -16,12 +17,15 @@ def index(request):
     if selected_brands:
         categories = categories.filter(brands__slug__in=selected_brands).distinct()
         
+    favourite_posts = Post.objects.filter(is_favourite=True, is_active=True).select_related('topic').order_by('-created_at')[:3]
+        
     context = {
         'categories': categories,
         'brands': brands,
         'selected_brands': selected_brands,
         'mobile_banners': mobile_banners,
         'desktop_banners': desktop_banners,
+        'favourite_posts': favourite_posts,
         'settings': SiteSettings.load(),
     }
     return render(request, 'index.html', context)

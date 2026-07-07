@@ -1,6 +1,26 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
-from .models import Category, Product, Brand
+from .models import Category, Product, Brand, HeroBanner
+from apps.core.models import SiteSettings
+
+@cache_page(60 * 15)
+def products_view(request):
+    brands = Brand.objects.all()
+    categories = Category.objects.filter(is_active=True)
+    
+    selected_brand = request.GET.get('brand')
+    if selected_brand:
+        categories = categories.filter(brands__slug=selected_brand).distinct()
+        
+    banner = HeroBanner.objects.filter(placement='PRODUCTS', is_active=True).first()
+        
+    context = {
+        'categories': categories,
+        'brands': brands,
+        'selected_brand': selected_brand,
+        'banner': banner,
+    }
+    return render(request, 'catalog/products_list.html', context)
 
 @cache_page(60 * 15)
 def category_products_view(request, category_slug):

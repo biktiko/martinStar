@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n core_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Martin Star - Otmartina{% endblock %}</title>
     <!-- Tailwind CSS CDN for rapid prototyping -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon_io/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon_io/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon_io/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/favicon_io/site.webmanifest' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon_io/favicon.ico' %}">
+
     {% block extra_head %}
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -31,13 +39,12 @@
 
                 <!-- Center: Navigation -->
                 <nav class="hidden lg:flex space-x-8">
-                    <a href="{% url 'index' %}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Home" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "About us" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Products" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Careers" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Contacts" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Online store" %}</a>
-                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% trans "Blog" %}</a>
+                    <a href="{% url 'index' %}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Home" %}</a>
+                    <a href="{% url 'products' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Products" %}</a>
+                    <a href="{% url 'post_list' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Blog" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Careers" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Contacts" %}</a>
+                    <a href="#" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "About us" %}</a>
                 </nav>
 
                 <!-- Right: Search & Language -->
@@ -48,7 +55,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
-                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% trans 'Search products...' %}">
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% t 'Search products...' %}">
                     </div>
 
                     <!-- Mobile Search Button -->
@@ -70,17 +77,13 @@
                         </button>
                         
                         <div class="absolute right-0 mt-2 w-20 bg-white rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden border border-gray-100">
-                            <form action="{% url 'set_language' %}" method="post" class="m-0">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                <div class="py-1">
-                                    {% for language in languages %}
-                                    <button type="submit" name="language" value="{{ language.code }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {% if language.code == LANGUAGE_CODE %}bg-gray-50 font-bold text-red-600{% endif %}">
-                                        {{ language.code|upper }}
-                                    </button>
-                                    {% endfor %}
-                                </div>
-                            </form>
+                            <div class="py-1">
+                                {% for language in languages %}
+                                <a href="{% change_lang language.code %}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {% if language.code == LANGUAGE_CODE %}bg-gray-50 font-bold text-red-600{% endif %}">
+                                    {{ language.code|upper }}
+                                </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
 
@@ -100,13 +103,12 @@
         <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white absolute w-full left-0 top-20 shadow-md origin-top transition-all duration-200 z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 max-w-7xl mx-auto">
                 
-                <a href="{% url 'index' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">{% trans "Home" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "About us" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "Products" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "Careers" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "Contacts" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "Online store" %}</a>
-                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% trans "Blog" %}</a>
+                <a href="{% url 'index' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">{% t "Home" %}</a>
+                <a href="{% url 'products' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% t "Products" %}</a>
+                <a href="{% url 'post_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% t "Blog" %}</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% t "Careers" %}</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% t "Contacts" %}</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-50">{% t "About us" %}</a>
             </div>
         </div>
 
@@ -118,13 +120,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input type="text" id="mobile-search-input" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 text-base transition duration-150 ease-in-out shadow-sm" placeholder="{% trans 'Search products...' %}">
+                <input type="text" id="mobile-search-input" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 text-base transition duration-150 ease-in-out shadow-sm" placeholder="{% t 'Search products...' %}">
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow w-full overflow-hidden">
+    <main class="flex-grow w-full overflow-visible relative z-20">
         {% block content %}{% endblock %}
     </main>
 

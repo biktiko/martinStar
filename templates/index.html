@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n core_tags %}
 
 {% block title %}Martin Star - Otmartina{% endblock %}
 
@@ -99,16 +99,16 @@
                     <div class="mb-6 flex flex-col items-center justify-center w-full">
                         
                         <!-- Solid Centered Title -->
-                        <h2 class="text-center text-2xl font-bold text-red-600 uppercase tracking-wider mb-4">{% trans "Our Products" %}</h2>
+                        <h2 class="text-center text-2xl font-bold text-red-600 uppercase tracking-wider mb-4">{% t "Our Products" %}</h2>
 
                         <!-- Brand Filter Group -->
                         {% if brands %}
                         <div class="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 mt-4 mb-4">
                             {% for brand in brands %}
                                 {% if not selected_brands or brand.slug in selected_brands %}
-                                    <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-100 scale-105 drop-shadow-md transition-all duration-300 cursor-pointer" title="{% trans 'Toggle filter' %}">
+                                    <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-100 scale-105 drop-shadow-md transition-all duration-300 cursor-pointer" title="{% t 'Toggle filter' %}">
                                 {% else %}
-                                    <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer" title="{% trans 'Toggle filter' %}">
+                                    <a href="?brand={{ brand.slug }}" onclick="toggleBrand(event, '{{ brand.slug }}')" class="opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer" title="{% t 'Toggle filter' %}">
                                 {% endif %}
                                     {% if brand.logo %}
                                         <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="h-10 sm:h-14 lg:h-16 w-auto object-contain">
@@ -171,7 +171,7 @@
                                         {% if category.image %}
                                             <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-contain p-1 mix-blend-multiply">
                                         {% else %}
-                                            <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest text-center leading-tight">{% trans "No image" %}</span>
+                                            <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest text-center leading-tight">{% t "No image" %}</span>
                                         {% endif %}
                                     </div>
                                     <h3 class="text-sm font-semibold text-slate-800 mt-1 text-center leading-tight">{{ category.name }}</h3>
@@ -187,7 +187,7 @@
                             {% endif %}
                         {% empty %}
                             <div class="w-full text-center py-10 min-w-[calc(100vw-2rem)]">
-                                <p class="text-gray-500 text-lg">{% trans "No categories found." %}</p>
+                                <p class="text-gray-500 text-lg">{% t "No categories found." %}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -216,7 +216,7 @@
                                 {% if category.image %}
                                     <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-contain p-2 mix-blend-multiply group-hover:scale-110 transition-transform duration-300">
                                 {% else %}
-                                    <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest text-center leading-tight">{% trans "No image" %}</span>
+                                    <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest text-center leading-tight">{% t "No image" %}</span>
                                 {% endif %}
                             </div>
                             <h3 class="font-semibold text-gray-800 text-base tracking-tight mt-1 text-center">{{ category.name }}</h3>
@@ -230,7 +230,7 @@
                         </a>
                         {% empty %}
                         <div class="col-span-full text-center py-10">
-                            <p class="text-gray-500 text-lg">{% trans "No categories found." %}</p>
+                            <p class="text-gray-500 text-lg">{% t "No categories found." %}</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -238,6 +238,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Favourite Posts Section -->
+    {% if favourite_posts %}
+    <section class="w-full bg-slate-50 border-t border-gray-200 mt-20 pt-16 pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center justify-center mb-12">
+                <span class="w-12 h-1 bg-red-600 rounded-full mb-4"></span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center uppercase">{% trans "Featured News" %}</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for post in favourite_posts %}
+                <a href="{{ post.get_absolute_url }}" class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col group cursor-pointer h-full border border-gray-100">
+                    <div class="w-full h-48 md:h-56 overflow-hidden">
+                        {% if post.cover_image %}
+                            <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                                <span class="text-gray-300 text-sm font-bold uppercase tracking-widest">{% trans "No image" %}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <time datetime="{{ post.created_at|date:'Y-m-d' }}" class="text-xs font-bold text-red-600 uppercase tracking-wider mb-2">{{ post.created_at|date:"F j, Y" }}</time>
+                        <h3 class="text-xl font-bold text-slate-800 line-clamp-2 mb-3">{{ post.title }}</h3>
+                        <div class="mt-auto">
+                            <span class="text-red-600 text-sm font-semibold uppercase tracking-wider group-hover:text-red-700 transition-colors">{% trans "Read more" %} →</span>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
 
     <!-- Floating Support Widget -->
     <button class="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-xl hover:shadow-2xl transform hover:scale-110 transition-all duration-300 z-50 focus:outline-none focus:ring-4 focus:ring-red-300 flex items-center justify-center">

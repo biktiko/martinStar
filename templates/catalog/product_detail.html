@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n core_tags %}
 
 {% block title %}{{ product.name }} - Martin Star{% endblock %}
 
@@ -11,7 +11,7 @@
         <nav class="flex mb-4 text-sm font-medium text-gray-500" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
-                    <a href="{% url 'index' %}" class="hover:text-red-600 transition-colors">{% trans "Home" %}</a>
+                    <a href="{% url 'index' %}" class="hover:text-red-600 transition-colors">{% t "Home" %}</a>
                 </li>
                 <li>
                     <div class="flex items-center">
@@ -36,7 +36,7 @@
                     {% if product.image or product.options.first.image %}
                         <img id="main-image" src="{% if product.options.first.image %}{{ product.options.first.image.url }}{% else %}{{ product.image.url }}{% endif %}" alt="{{ product.name }}" class="max-w-full max-h-[280px] lg:max-h-[350px] object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500">
                     {% else %}
-                        <div class="text-gray-300 font-medium">{% trans "No Image Available" %}</div>
+                        <div class="text-gray-300 font-medium">{% t "No Image Available" %}</div>
                     {% endif %}
                 </div>
 
@@ -51,7 +51,7 @@
                     <!-- Options Buttons -->
                     {% if product.options.all %}
                     <div class="mb-4">
-                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{% trans "Select Weight" %}</h3>
+                        <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{% t "Select Weight" %}</h3>
                         <div class="flex flex-wrap gap-2">
                             {% for option in product.options.all %}
                             <button 
@@ -61,7 +61,7 @@
                                 data-dimensions="{% if option.box_dimensions %}{{ option.box_dimensions }} {{ option.get_box_dimensions_unit_display }}{% else %}-{% endif %}"
                                 data-packing="{% if option.packing_options %}{{ option.formatted_packing }}{% else %}-{% endif %}"
                             >
-                                {{ option.weight|floatformat:0 }} {% trans "g" %}
+                                {{ option.weight|floatformat:0 }} {% t "g" %}
                             </button>
                             {% endfor %}
                         </div>
@@ -70,44 +70,44 @@
 
                     <!-- Technical Specifications Table -->
                     <div class="mt-4 border-t border-gray-100 pt-4">
-                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% trans "Specifications" %}</h2>
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% t "Specifications" %}</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
                             
                             <!-- Logistics (Dynamic) -->
                             <div class="flex justify-between py-1 border-b border-gray-50">
-                                <span class="text-gray-500 text-xs">{% trans "Barcode" %}</span>
+                                <span class="text-gray-500 text-xs">{% t "Barcode" %}</span>
                                 <span id="val-barcode" class="text-gray-900 font-medium text-xs text-right">-</span>
                             </div>
                             
                             <div class="flex justify-between py-1 border-b border-gray-50">
-                                <span class="text-gray-500 text-xs">{% trans "L x W x H" %}</span>
+                                <span class="text-gray-500 text-xs">{% t "L x W x H" %}</span>
                                 <span id="val-dimensions" class="text-gray-900 font-medium text-xs text-right">-</span>
                             </div>
 
                             <div class="flex justify-between py-1 border-b border-gray-50">
-                                <span class="text-gray-500 text-xs">{% trans "Packing" %}</span>
+                                <span class="text-gray-500 text-xs">{% t "Packing" %}</span>
                                 <span id="val-packing" class="text-gray-900 font-medium text-xs text-right">-</span>
                             </div>
 
                             <!-- Storage (Static) -->
                             {% if product.storage_period_days %}
                             <div class="flex justify-between py-1 border-b border-gray-50">
-                                <span class="text-gray-500 text-xs">{% trans "Shelf Life" %}</span>
-                                <span class="text-gray-900 font-medium text-xs text-right">{{ product.storage_period_days }} {% trans "days" %}</span>
+                                <span class="text-gray-500 text-xs">{% t "Shelf Life" %}</span>
+                                <span class="text-gray-900 font-medium text-xs text-right">{{ product.storage_period_days }} {% t "days" %}</span>
                             </div>
                             {% endif %}
                             
                             {% if product.min_storage_temp is not None %}
                             <div class="flex justify-between items-center py-1 border-b border-gray-50 gap-2">
-                                <span class="text-gray-500 text-[10px] leading-tight" title="{% trans 'Minimum storage temperature' %}">{% trans "Minimum storage temperature" %}</span>
+                                <span class="text-gray-500 text-[10px] leading-tight" title="{% t 'Minimum storage temperature' %}">{% t "Minimum storage temperature" %}</span>
                                 <span class="text-gray-900 font-medium text-xs text-right whitespace-nowrap">{{ product.min_storage_temp }}°C</span>
                             </div>
                             {% endif %}
                             
                             {% if product.max_storage_temp is not None %}
                             <div class="flex justify-between items-center py-1 border-b border-gray-50 gap-2">
-                                <span class="text-gray-500 text-[10px] leading-tight" title="{% trans 'Maximum storage temperature' %}">{% trans "Maximum storage temperature" %}</span>
+                                <span class="text-gray-500 text-[10px] leading-tight" title="{% t 'Maximum storage temperature' %}">{% t "Maximum storage temperature" %}</span>
                                 <span class="text-gray-900 font-medium text-xs text-right whitespace-nowrap">{{ product.max_storage_temp }}°C</span>
                             </div>
                             {% endif %}
@@ -118,36 +118,36 @@
                     <!-- Nutrition Information -->
                     {% if product.calories or product.proteins or product.fats or product.carbohydrates %}
                     <div class="mt-4 border-t border-gray-100 pt-4">
-                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% trans "Nutrition Value" %}</h2>
+                        <h2 class="text-lg font-bold text-gray-900 mb-3">{% t "Nutrition Value" %}</h2>
 
                         <div class="bg-gray-50 rounded-xl p-3">
-                            <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">{% trans "Nutritional Value per 100g" %}</h3>
+                            <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">{% t "Nutritional Value per 100g" %}</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                                 {% if product.calories %}
                                 <div>
                                     <div class="text-gray-900 font-bold text-sm">{{ product.calories }}</div>
-                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Energy" %}</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% t "Energy" %}</div>
                                 </div>
                                 {% endif %}
                                 
                                 {% if product.proteins %}
                                 <div>
                                     <div class="text-gray-900 font-bold text-sm">{{ product.proteins }}g</div>
-                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Proteins" %}</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% t "Proteins" %}</div>
                                 </div>
                                 {% endif %}
 
                                 {% if product.fats %}
                                 <div>
                                     <div class="text-gray-900 font-bold text-sm">{{ product.fats }}g</div>
-                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Fats" %}</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% t "Fats" %}</div>
                                 </div>
                                 {% endif %}
 
                                 {% if product.carbohydrates %}
                                 <div>
                                     <div class="text-gray-900 font-bold text-sm">{{ product.carbohydrates }}g</div>
-                                    <div class="text-gray-500 text-[10px] mt-0.5">{% trans "Carbs" %}</div>
+                                    <div class="text-gray-500 text-[10px] mt-0.5">{% t "Carbs" %}</div>
                                 </div>
                                 {% endif %}
                             </div>

@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from apps.core.image_optimization import optimize_image
+from tinymce.models import HTMLField
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -145,8 +146,28 @@ class ProductOption(models.Model):
         super().save(*args, **kwargs)
 
 class HeroBanner(models.Model):
-    title = models.CharField(max_length=255, blank=True, help_text="Internal title for admin panel")
-    image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Banner image")
+    PLACEMENT_CHOICES = [
+        ('HOME', 'Homepage'),
+        ('BLOG_LIST', 'Blog List Page'),
+        ('BLOG_POST', 'Blog Post Inner Page'),
+        ('PARTNERS', 'Partners Page'),
+        ('PRODUCTS', 'Products List Page'),
+        ('ABOUT', 'About Us Page'),
+        ('CAREERS', 'Careers Page'),
+        ('CONTACT', 'Contact Page'),
+    ]
+    
+    title = HTMLField(blank=True, help_text="Текст заголовка (можно форматировать)")
+    subtitle = HTMLField(blank=True, help_text="Текст подзаголовка под главным заголовком")
+    show_text_overlay = models.BooleanField(default=True, help_text="Показывать заголовок и подзаголовок поверх баннера")
+    
+    placement = models.CharField(max_length=50, choices=PLACEMENT_CHOICES, default='HOME', help_text="Where this banner should be displayed")
+    
+    image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Desktop Banner image")
+    image_mobile = models.ImageField(upload_to='banners/mobile/', null=True, blank=True, help_text="Mobile Banner image (Vertical)")
+    
+    video_file = models.FileField(upload_to='banners/videos/', null=True, blank=True, help_text="Upload .mp4 or .webm for animated Desktop banners. Overrides image.")
+    video_file_mobile = models.FileField(upload_to='banners/videos/mobile/', null=True, blank=True, help_text="Upload .mp4 or .webm for animated Mobile banners. Overrides mobile image.")
     banner_link = models.URLField(blank=True, help_text="Optional link when clicking the banner")
     is_active = models.BooleanField(default=True)
     show_on_mobile = models.BooleanField(default=True, help_text="Show this banner on mobile devices")
@@ -162,6 +183,6 @@ class HeroBanner(models.Model):
         return self.title or f"Banner {self.id}"
 
     def save(self, *args, **kwargs):
-        if self.image and not self.image.name.lower().endswith('.webp'):
+        if self.image and not self.image.name.lower().endswith(('.webp', '.gif', '.svg')):
             self.image = optimize_image(self.image)
         super().save(*args, **kwargs)

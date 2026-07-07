@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - Martin Star{% endblock %}
+
+{% block content %}
+<div class="w-full bg-white min-h-screen pb-12 pt-0">
+    {% include 'components/_banner_strip.html' with banner=banner %}
+    
+    <!-- Header Section -->
+    <header class="max-w-3xl mx-auto px-4 md:px-0 text-center">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4">{{ post.title }}</h1>
+        <div class="text-slate-500 text-sm mb-10 border-b border-gray-100 pb-4">
+            <time datetime="{{ post.created_at|date:'Y-m-d' }}">{{ post.created_at|date:"F j, Y" }}</time>
+        </div>
+    </header>
+
+    <!-- Content Wrapper (Tailwind Typography) -->
+    <article class="w-full max-w-3xl mx-auto prose prose-slate prose-lg lg:prose-xl px-4 md:px-0">
+        
+        {% if post.body and post.body.blocks %}
+            {% for block in post.body.blocks %}
+                
+                <!-- PARAGRAPH -->
+                {% if block.type|lower == 'paragraph' %}
+                    <p>{{ block.data.text|safe }}</p>
+                
+                <!-- HEADER -->
+                {% elif block.type|lower == 'header' %}
+                    {% if block.data.level == 2 %}
+                        <h2>{{ block.data.text|safe }}</h2>
+                    {% elif block.data.level == 3 %}
+                        <h3>{{ block.data.text|safe }}</h3>
+                    {% elif block.data.level == 4 %}
+                        <h4>{{ block.data.text|safe }}</h4>
+                    {% else %}
+                        <h2>{{ block.data.text|safe }}</h2>
+                    {% endif %}
+                
+                <!-- IMAGE -->
+                {% elif block.type|lower == 'image' %}
+                    <figure>
+                        <img src="{{ block.data.file.url }}" alt="{{ block.data.caption|default:'' }}" class="w-full rounded-xl shadow-sm object-cover">
+                        {% if block.data.caption %}
+                            <figcaption class="text-center text-sm text-gray-500 mt-2">{{ block.data.caption }}</figcaption>
+                        {% endif %}
+                    </figure>
+                
+                <!-- EMBED (Video) -->
+                {% elif block.type|lower == 'embed' %}
+                    <div class="aspect-video w-full rounded-xl overflow-hidden shadow-sm my-8">
+                        <iframe 
+                            src="{{ block.data.embed }}" 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% if block.data.caption %}
+                        <p class="text-center text-sm text-gray-500 mt-2">{{ block.data.caption }}</p>
+                    {% endif %}
+                    
+                <!-- LIST -->
+                {% elif block.type|lower == 'list' %}
+                    {% if block.data.style == 'ordered' %}
+                        <ol>
+                            {% for item in block.data.items %}
+                                <li>{{ item|safe }}</li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <ul>
+                            {% for item in block.data.items %}
+                                <li>{{ item|safe }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                
+                {% endif %}
+                
+            {% endfor %}
+        {% else %}
+            <p>No content available.</p>
+        {% endif %}
+        
+    </article>
+</div>
+{% endblock %}

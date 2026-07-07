@@ -14,4 +14,4 @@ class ProductTranslationOptions(TranslationOptions):
 
 @register(HeroBanner)
 class HeroBannerTranslationOptions(TranslationOptions):
-    fields = ('image',)
+    fields = ('title', 'subtitle', 'image', 'image_mobile', 'video_file', 'video_file_mobile')

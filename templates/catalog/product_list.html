@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n core_tags %}
 
 {% block title %}{{ category.name }} - Martin Star{% endblock %}
 
@@ -13,7 +13,7 @@
             <!-- Brand Filters -->
             {% if brands %}
             <div>
-                <h3 class="text-base font-bold text-gray-900 mb-3">{% trans "Brands" %}</h3>
+                <h3 class="text-base font-bold text-gray-900 mb-3">{% t "Brands" %}</h3>
                 <div class="flex flex-wrap gap-2">
                     {% for brand in brands %}
                     {% if selected_brand == brand.slug %}
@@ -43,7 +43,7 @@
 
             <!-- Categories (Desktop) -->
             <div class="hidden lg:block">
-                <h3 class="text-base font-bold text-gray-900 mb-3">{% trans "Categories" %}</h3>
+                <h3 class="text-base font-bold text-gray-900 mb-3">{% t "Categories" %}</h3>
                 <nav class="space-y-1">
                     {% for cat in categories %}
                     <a href="{% url 'category_products' cat.slug %}" 
@@ -107,9 +107,10 @@
 
         <!-- Products Grid -->
         {% if products %}
-        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-24">
             {% for product in products %}
-            <div class="relative group h-full">
+            <div class="relative group h-full hover:z-50 product-card" 
+                 data-images="{% if product.image %}{{ product.image.url }}{% endif %}{% for option in product.options.all %}{% if option.image %},{{ option.image.url }}{% endif %}{% endfor %}">
                 
                 <!-- Main Card (Static + Hover Base) -->
                 <a href="{% url 'product_detail' category.slug product.slug %}" 
@@ -117,12 +118,12 @@
                     
                     <!-- Image with Skeleton -->
                     <div class="w-full h-32 lg:h-auto lg:aspect-square mb-3 relative flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gray-100 animate-pulse rounded-xl" id="skeleton-{{ product.id }}"></div>
+                        <div class="absolute inset-0 bg-gray-100 animate-pulse rounded-xl skeleton" id="skeleton-{{ product.id }}"></div>
                         {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain relative z-10 transition-transform duration-500 opacity-0 lg:group-hover:scale-105" onload="document.getElementById('skeleton-{{ product.id }}').style.display='none'; this.classList.remove('opacity-0');">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image w-full h-full object-contain relative z-10 transition-transform duration-500 opacity-0 lg:group-hover:scale-105" onload="document.getElementById('skeleton-{{ product.id }}').style.display='none'; this.classList.remove('opacity-0');">
                         {% else %}
                         <div class="absolute inset-0 bg-gray-50 rounded-xl flex items-center justify-center relative z-10" onload="document.getElementById('skeleton-{{ product.id }}').style.display='none';">
-                            <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest">{% trans "No Image" %}</span>
+                            <span class="text-gray-300 text-[10px] font-medium uppercase tracking-widest">{% t "No Image" %}</span>
                         </div>
                         {% endif %}
                     </div>
@@ -158,8 +159,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">{% trans "No products found" %}</h3>
-            <p class="text-gray-500">{% trans "Try selecting a different brand or category." %}</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">{% t "No products found" %}</h3>
+            <p class="text-gray-500">{% t "Try selecting a different brand or category." %}</p>
         </div>
         {% endif %}
 
@@ -183,6 +184,41 @@
                 nav.scrollBy({ left: -150, behavior: 'smooth' });
             });
         }
+
+        // Product Hover Slideshow
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const imgStr = card.getAttribute('data-images');
+            if(!imgStr) return;
+            
+            // Clean up comma separated list, filter out empties, and deduplicate
+            let images = imgStr.split(',').filter(src => src.trim().length > 0);
+            images = [...new Set(images)]; // Deduplicate
+            
+            if (images.length > 1) {
+                const imgEl = card.querySelector('.product-image');
+                if(!imgEl) return;
+                
+                let intervalId;
+                let currentIndex = 0;
+                const originalSrc = imgEl.src;
+
+                card.addEventListener('mouseenter', () => {
+                    if (images.length > 1) {
+                        intervalId = setInterval(() => {
+                            currentIndex = (currentIndex + 1) % images.length;
+                            imgEl.src = images[currentIndex];
+                        }, 1000); // cycle every 1000ms (1 second)
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    clearInterval(intervalId);
+                    currentIndex = 0;
+                    imgEl.src = originalSrc;
+                });
+            }
+        });
     });
 </script>
 {% endblock %}

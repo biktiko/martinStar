@@ -1,6 +1,8 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from modeltranslation.admin import TranslationAdmin
+from tinymce.models import HTMLField
+from tinymce.widgets import TinyMCE
 from .models import Category, Product, Brand, ProductOption, HeroBanner
 
 @admin.register(Category)
@@ -49,6 +51,28 @@ class BrandAdmin(ModelAdmin):
 
 @admin.register(HeroBanner)
 class HeroBannerAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ('title', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order')
+    list_display = ('id', 'placement', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order')
     list_editable = ('is_active', 'show_on_mobile', 'show_on_desktop', 'order')
-    search_fields = ('title',)
+    list_filter = ('placement', 'is_active')
+    
+    formfield_overrides = {
+        HTMLField: {'widget': TinyMCE()}
+    }
+    
+    fieldsets = (
+        ('Placement & Status', {
+            'fields': ('placement', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order', 'banner_link')
+        }),
+        ('Text Overlay', {
+            'fields': ('show_text_overlay', 'title', 'subtitle'),
+            'description': 'Text that will be rendered on top of the banner media. You can format color, size, etc.'
+        }),
+        ('Desktop Media', {
+            'fields': ('image', 'video_file'),
+            'description': 'Banner assets for wide screens. Video will override image if both are provided.'
+        }),
+        ('Mobile Media', {
+            'fields': ('image_mobile', 'video_file_mobile'),
+            'description': 'Banner assets for vertical/mobile screens. If empty, desktop assets will be used.'
+        }),
+    )
