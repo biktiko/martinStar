@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 from .models import Category, Product, Brand, HeroBanner
 from apps.core.models import SiteSettings
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def products_view(request):
     brands = Brand.objects.all()
     categories = Category.objects.filter(is_active=True)

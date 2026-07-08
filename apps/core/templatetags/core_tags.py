@@ -68,6 +68,7 @@ TRANSLATIONS = {
     'Positions': {'ru': 'Позиций', 'hy': 'Ապրանքատեսակներ', 'en': 'Positions'},
     'Categories': {'ru': 'Категорий', 'hy': 'Կատեգորիաներ', 'en': 'Categories'},
     'All': {'ru': 'Все', 'hy': 'Բոլորը', 'en': 'All'},
+    'Items in the assortment': {'ru': 'Товаров в ассортименте', 'hy': 'Ապրանքներ տեսականիում', 'en': 'Items in the assortment'},
 }
 
 @register.simple_tag(takes_context=True)

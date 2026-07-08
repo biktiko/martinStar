@@ -163,8 +163,8 @@ class HeroBanner(models.Model):
     
     placement = models.CharField(max_length=50, choices=PLACEMENT_CHOICES, default='HOME', help_text="Where this banner should be displayed")
     
-    image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Desktop Banner image")
-    image_mobile = models.ImageField(upload_to='banners/mobile/', null=True, blank=True, help_text="Mobile Banner image (Vertical)")
+    image = models.ImageField(upload_to='banners/', null=True, blank=True, help_text="Desktop Banner image. Рекомендуемый размер: 1920x300 пикселей.")
+    image_mobile = models.ImageField(upload_to='banners/mobile/', null=True, blank=True, help_text="Mobile Banner image (Vertical). Рекомендуемый размер: 1080x1920 пикселей.")
     
     video_file = models.FileField(upload_to='banners/videos/', null=True, blank=True, help_text="Upload .mp4 or .webm for animated Desktop banners. Overrides image.")
     video_file_mobile = models.FileField(upload_to='banners/videos/mobile/', null=True, blank=True, help_text="Upload .mp4 or .webm for animated Mobile banners. Overrides mobile image.")

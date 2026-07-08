@@ -87,7 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (input.id.startsWith('id_image_mobile')) {
             aspectRatio = 9 / 16;
         } else if (input.id.startsWith('id_image')) {
-            aspectRatio = 21 / 9;
+            // Desktop banner is typically full width (1920px) and fixed 300px height on lg screens
+            aspectRatio = 1920 / 300; 
         }
         
         if (!aspectRatio) return;
