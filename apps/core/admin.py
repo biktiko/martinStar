@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import SiteSettings, FooterCompanyLink
+from .models import SiteSettings, FooterCompanyLink, FooterSettings, CompanyHistory
 
 class FooterCompanyLinkInline(TranslationTabularInline, TabularInline):
     model = FooterCompanyLink
@@ -10,13 +10,26 @@ class FooterCompanyLinkInline(TranslationTabularInline, TabularInline):
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
+class SiteSettingsAdmin(ModelAdmin):
+    fieldsets = (
+        ('General', {
+            'fields': ('mobile_grid_layout', 'featured_news_layout')
+        }),
+    )
+
+    # Only allow one instance
+    def has_add_permission(self, request):
+        return not SiteSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(FooterSettings)
+class FooterSettingsAdmin(ModelAdmin, TranslationAdmin):
     inlines = [FooterCompanyLinkInline]
     
     fieldsets = (
-        ('General', {
-            'fields': ('mobile_grid_layout',)
-        }),
         ('Footer: Contacts', {
             'fields': ('phone_1', 'phone_2', 'address_text', 'contact_email')
         }),
@@ -33,7 +46,14 @@ class SiteSettingsAdmin(ModelAdmin, TranslationAdmin):
 
     # Only allow one instance
     def has_add_permission(self, request):
-        return not SiteSettings.objects.exists()
+        return not FooterSettings.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+@admin.register(CompanyHistory)
+class CompanyHistoryAdmin(ModelAdmin, TranslationAdmin):
+    list_display = ('year', 'title', 'is_active', 'order')
+    list_editable = ('is_active', 'order')
+    search_fields = ('year', 'title', 'description')
+    ordering = ('year',)

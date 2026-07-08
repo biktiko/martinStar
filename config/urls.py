@@ -7,7 +7,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
-from apps.core.views import index
+from apps.core.views import index, about
 from apps.catalog.views import category_products_view, product_detail_view, products_view
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', index, name='index'),
+    path('about/', about, name='about'),
     path('products/', products_view, name='products'),
     path('blog/', include('apps.blog.urls')),
     path('editorjs/', include('django_editorjs_fields.urls')),

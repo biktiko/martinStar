@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from apps.core.models import SiteSettings
+from apps.core.models import SiteSettings, CompanyHistory
 from apps.catalog.models import Category, Brand, HeroBanner
 from apps.blog.models import Post
 
@@ -29,3 +29,12 @@ def index(request):
         'settings': SiteSettings.load(),
     }
     return render(request, 'index.html', context)
+
+def about(request):
+    history_milestones = CompanyHistory.objects.filter(is_active=True).order_by('year')
+    banner = HeroBanner.objects.filter(placement='ABOUT', is_active=True).first()
+    context = {
+        'history_milestones': history_milestones,
+        'banner': banner,
+    }
+    return render(request, 'about.html', context)

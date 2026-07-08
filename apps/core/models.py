@@ -13,26 +13,8 @@ class SiteSettings(models.Model):
         help_text="Choose the mobile category slider layout."
     )
 
-    # Footer: Contacts
-    phone_1 = models.CharField(max_length=50, blank=True)
-    phone_2 = models.CharField(max_length=50, blank=True)
-    address_text = models.TextField(blank=True, help_text="Physical address shown in footer")
-    contact_email = models.EmailField(blank=True)
-
-    # Footer: Social Media
-    social_fb = models.URLField("Facebook URL", blank=True)
-    social_vk = models.URLField("VKontakte URL", blank=True)
-    social_instagram = models.URLField("Instagram URL", blank=True)
-    social_linkedin = models.URLField("LinkedIn URL", blank=True)
-    social_tiktok = models.URLField("TikTok URL", blank=True)
-    social_youtube = models.URLField("YouTube URL", blank=True)
-
-    # Footer: Martin App
-    app_download_url = models.URLField(blank=True, help_text="e.g. http://ma1.am")
-    app_qr_code = models.ImageField(upload_to='footer/', blank=True, null=True, help_text="QR Code for desktop footer")
-
-    # Footer: Copyright
-    copyright_text = models.CharField(max_length=255, blank=True, default="© 2026 Martin Star. All rights reserved.")
+    featured_news_layout = models.CharField(
+    )
 
     class Meta:
         verbose_name = 'Site Setting'
@@ -40,12 +22,52 @@ class SiteSettings(models.Model):
 
     def __str__(self):
         return "Global Site Settings"
-
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)
         cache.delete('site_settings')
 
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+class FooterSettings(models.Model):
+    # Contacts
+    phone_1 = models.CharField(max_length=50, blank=True)
+    phone_2 = models.CharField(max_length=50, blank=True)
+    address_text = models.TextField(blank=True, help_text="Physical address shown in footer")
+    contact_email = models.EmailField(blank=True)
+
+    # Social Media
+    social_fb = models.URLField("Facebook URL", blank=True)
+    social_vk = models.URLField("VKontakte URL", blank=True)
+    social_instagram = models.URLField("Instagram URL", blank=True)
+    social_linkedin = models.URLField("LinkedIn URL", blank=True)
+    social_tiktok = models.URLField("TikTok URL", blank=True)
+    social_youtube = models.URLField("YouTube URL", blank=True)
+
+    # Martin App
+    app_download_url = models.URLField(blank=True, help_text="e.g. http://ma1.am")
+    app_qr_code = models.ImageField(upload_to='footer/', blank=True, null=True, help_text="QR Code for desktop footer")
+
+    # Copyright
+    copyright_text = models.CharField(max_length=255, blank=True, default="© 2026 Martin Star. All rights reserved.")
+
+    class Meta:
+        verbose_name = 'Footer Setting'
+        verbose_name_plural = 'Footer Settings'
+
+    def __str__(self):
+        return "Global Footer Settings"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+        cache.delete('footer_settings')
 
     def delete(self, *args, **kwargs):
         pass
@@ -56,7 +78,7 @@ class SiteSettings(models.Model):
         return obj
 
 class FooterCompanyLink(models.Model):
-    settings = models.ForeignKey(SiteSettings, related_name='company_links', on_delete=models.CASCADE)
+    settings = models.ForeignKey(FooterSettings, related_name='company_links', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     url = models.CharField(max_length=255, help_text="URL or relative path like /about/")
     order = models.IntegerField(default=0)
@@ -68,5 +90,21 @@ class FooterCompanyLink(models.Model):
 
     def __str__(self):
         return self.title
+
+class CompanyHistory(models.Model):
+    year = models.IntegerField(unique=True)
+    title = models.CharField(max_length=255, help_text="Short milestone title (e.g., Canned goods production start)")
+    description = models.TextField(blank=True, help_text="Optional longer description")
+    image = models.ImageField(upload_to='about/history/', null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['year']
+        verbose_name = "Company Milestone"
+        verbose_name_plural = "Company Milestones"
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
 
 

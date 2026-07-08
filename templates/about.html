@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static i18n core_tags %}
+
+{% block title %}Martin Star - {% t "About Us" %}{% endblock %}
+
+{% block content %}
+    <!-- 1. Clean Intro & Stats Section -->
+    {% include 'components/_banner_strip.html' with banner=banner %}
+
+    <div class="max-w-3xl mx-auto text-center px-4 mt-12 mb-16 text-slate-600 text-lg md:text-xl leading-relaxed">
+        {% t "Over the years of existence, from a small business producing roasted seeds, our company has grown into a powerful holding that implements all stages of a complex agricultural production process: from growing in our own fields to selling quality products on store shelves." %}
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4 py-8 border-y border-slate-100 mb-12 md:mb-16 text-center">
+        <div>
+            <span class="block text-4xl font-black text-red-600 mb-2">18</span>
+            <span class="text-slate-500 font-medium uppercase tracking-wider text-sm">{% t "Years on the market" %}</span>
+        </div>
+        <div>
+            <span class="block text-4xl font-black text-red-600 mb-2">70+</span>
+            <span class="text-slate-500 font-medium uppercase tracking-wider text-sm">{% t "Countries" %}</span>
+        </div>
+        <div>
+            <span class="block text-4xl font-black text-red-600 mb-2">200+</span>
+            <span class="text-slate-500 font-medium uppercase tracking-wider text-sm">{% t "Commodity Items" %}</span>
+        </div>
+    </div>
+
+    <!-- 2. Company Advantages Grid -->
+    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 text-center uppercase tracking-wide mb-12">{% t "Our Advantages" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 mb-12 md:mb-16">
+        <div class="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-10 h-1 bg-red-600 mb-4 rounded-full"></div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3 uppercase">{% t "Customer confidence" %}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                {% t "We strive to create healthy and natural products for our clients all over the world, we try to satisfy their needs and exceed expectations." %}
+            </p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-10 h-1 bg-red-600 mb-4 rounded-full"></div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3 uppercase">{% t "Own raw materials" %}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                {% t "An important advantage of the holding is the availability of its own agricultural land, processing base, warehouses." %}
+            </p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-10 h-1 bg-red-600 mb-4 rounded-full"></div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3 uppercase">{% t "Technological production" %}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                {% t "Constant updating of the technical base allows achieving high quality products and uninterrupted production cycle." %}
+            </p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-10 h-1 bg-red-600 mb-4 rounded-full"></div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3 uppercase">{% t "Quality control" %}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                {% t "All enterprises have modern quality control laboratories operating at all stages, from raw materials to final products." %}
+            </p>
+        </div>
+    </div>
+
+    <!-- 3. Re-engineered Vertical Timeline (History) -->
+    {% if history_milestones %}
+    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 text-center uppercase tracking-wide mb-12">{% t "Our History" %}</h2>
+    <div class="relative max-w-5xl mx-auto px-4 py-8 mb-12 md:mb-16">
+        <!-- Center Line (Desktop) -->
+        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 transform -translate-x-1/2"></div>
+        <!-- Mobile Line -->
+        <div class="md:hidden absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+        
+        {% for milestone in history_milestones %}
+        <div class="relative flex flex-col md:flex-row items-center w-full mb-12 last:mb-0 reveal-on-scroll opacity-0 translate-y-12 transition-all duration-700 ease-out">
+            <!-- The Pin (Dot) -->
+            <div class="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-red-600 ring-4 ring-white transform -translate-x-[7px] md:-translate-x-1/2 mt-1 md:mt-0 z-10"></div>
+            
+            {% if forloop.counter|divisibleby:2 %}
+                <!-- Right Card (Even) -->
+                <div class="w-full md:w-5/12 ml-auto text-left pl-8 md:pl-8">
+            {% else %}
+                <!-- Left Card (Odd) -->
+                <div class="w-full md:w-5/12 md:text-right pr-0 md:pr-8 pl-8 md:pl-0">
+            {% endif %}
+                    <span class="text-3xl font-black text-red-600 block mb-2">{{ milestone.year }}</span>
+                    <h3 class="text-lg font-semibold text-slate-800 uppercase mb-3">{{ milestone.title }}</h3>
+                    {% if milestone.description %}
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">{{ milestone.description }}</p>
+                    {% endif %}
+                    {% if milestone.image %}
+                        <img src="{{ milestone.image.url }}" alt="{{ milestone.title }}" class="w-full h-48 md:h-64 object-cover rounded-xl shadow-sm mt-3">
+                    {% endif %}
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 4. Product Quality Callout Block -->
+    <section class="bg-slate-50 py-16 px-4 md:px-12 rounded-[2rem] max-w-6xl mx-auto mb-12 md:mb-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border border-slate-100">
+        <div>
+            <!-- Generated showcase picture of raw seeds/nuts materials. -->
+            <img src="{% static 'images/raw_seeds_nuts.png' %}" alt="{% t 'Quality raw materials' %}" class="w-full h-80 object-cover rounded-2xl shadow-md">
+        </div>
+        <div>
+            <p class="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">{% t "Striving for higher standards" %}</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{% t "Always High Quality" %}</h2>
+            <p class="text-slate-600 leading-relaxed">
+                {% t "To meet the highest expectations, we process thousands of tons of selected raw materials. Strict adherence to international standards and non-stop quality control guarantees that every product reaching your table delivers genuine taste and nutritional value. The company's goal is to establish long-term, mutually beneficial cooperation built on an impeccable reputation." %}
+            </p>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-12');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>
+{% endblock %}

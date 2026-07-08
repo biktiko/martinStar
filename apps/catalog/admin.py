@@ -59,6 +59,15 @@ class HeroBannerAdmin(ModelAdmin, TranslationAdmin):
         HTMLField: {'widget': TinyMCE()}
     }
     
+    class Media:
+        css = {
+            'all': ('https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css',)
+        }
+        js = (
+            'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js',
+            'js/admin_cropper.js',
+        )
+    
     fieldsets = (
         ('Placement & Status', {
             'fields': ('placement', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order', 'banner_link')

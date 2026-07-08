@@ -79,7 +79,7 @@
     </div>
     {% endif %}
 
-    <div class="bg-gradient-to-b from-gray-50 to-gray-200">
+    <div class="bg-gradient-to-b from-gray-50 to-gray-200 pb-32 md:pb-40">
         <!-- Full-width hero container -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-stretch min-h-[calc(100vh-5rem)]">
@@ -241,16 +241,27 @@
 
     <!-- Favourite Posts Section -->
     {% if favourite_posts %}
-    <section class="w-full bg-slate-50 border-t border-gray-200 mt-20 pt-16 pb-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 md:-mt-32 mb-20">
+        <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 p-6 sm:p-10 md:p-14 border border-slate-50">
             <div class="flex flex-col items-center justify-center mb-12">
                 <span class="w-12 h-1 bg-red-600 rounded-full mb-4"></span>
                 <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight text-center uppercase">{% trans "Featured News" %}</h2>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% if settings.featured_news_layout == 'GRID' %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            {% elif settings.featured_news_layout == 'SLIDER' %}
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 group">
+                <button onclick="document.getElementById('news-slider').scrollBy({left: -300, behavior: 'smooth'})" class="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-md rounded-full w-12 h-12 items-center justify-center cursor-pointer hover:bg-white -left-6 border border-gray-100 transition-opacity opacity-0 group-hover:opacity-100">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <div id="news-slider" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-6 pb-8 scroll-smooth" style="-ms-overflow-style: none; scrollbar-width: none;">
+            {% else %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            {% endif %}
+            
                 {% for post in favourite_posts %}
-                <a href="{{ post.get_absolute_url }}" class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col group cursor-pointer h-full border border-gray-100">
+                <a href="{{ post.get_absolute_url }}" class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col group cursor-pointer border border-gray-100 {% if settings.featured_news_layout == 'SLIDER' %}snap-start shrink-0 w-80 md:w-96{% else %}h-full{% endif %}">
                     <div class="w-full h-48 md:h-56 overflow-hidden">
                         {% if post.cover_image %}
                             <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -269,6 +280,19 @@
                     </div>
                 </a>
                 {% endfor %}
+            </div>
+            {% if settings.featured_news_layout == 'SLIDER' %}
+                <button onclick="document.getElementById('news-slider').scrollBy({left: 300, behavior: 'smooth'})" class="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-md rounded-full w-12 h-12 items-center justify-center cursor-pointer hover:bg-white -right-6 border border-gray-100 transition-opacity opacity-0 group-hover:opacity-100">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+            {% endif %}
+
+            <div class="flex justify-center mt-12">
+                <a href="{% url 'post_list' %}" class="inline-flex items-center gap-2 px-6 py-3 border border-red-600 text-red-600 font-semibold text-sm uppercase tracking-wider rounded-full hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md">
+                    {% trans "All News" %}
+                    <span>→</span>
+                </a>
             </div>
         </div>
     </section>
