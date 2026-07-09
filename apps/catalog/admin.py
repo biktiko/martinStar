@@ -49,6 +49,7 @@ class BrandAdmin(ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
 
+
 @admin.register(HeroBanner)
 class HeroBannerAdmin(ModelAdmin, TranslationAdmin):
     list_display = ('id', 'placement', 'is_active', 'show_on_mobile', 'show_on_desktop', 'order')

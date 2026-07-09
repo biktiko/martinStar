@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static core_tags l10n %}
+
+{% block title %}Martin Star - {% t "Contacts" %}{% endblock %}
+
+{% block content %}
+<div class="pt-12 md:pt-8 pb-12">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <!-- Headquarters Block -->
+        {% if hq %}
+        <div class="max-w-7xl mx-auto bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative overflow-hidden">
+            <!-- Optional bg decoration -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-red-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
+
+            <div class="z-10 space-y-4">
+                <span class="text-red-500 font-bold uppercase tracking-widest text-sm">{% t "Headquarters" %}</span>
+                <h2 class="text-3xl font-bold">{{ hq.name }}</h2>
+                <p class="text-slate-300 text-lg max-w-md">{{ hq.address }}</p>
+            </div>
+
+            <div class="z-10 flex flex-col items-start md:items-end gap-2">
+                {% if hq.phone %}
+                <a href="tel:{{ hq.phone }}" class="text-xl font-semibold hover:text-red-400 transition-colors">{{ hq.phone }}</a>
+                {% endif %}
+                {% if hq.email %}
+                <a href="mailto:{{ hq.email }}" class="text-slate-400 hover:text-white transition-colors">{{ hq.email }}</a>
+                {% endif %}
+                <button onclick="focusMap({{ hq.latitude|unlocalize }}, {{ hq.longitude|unlocalize }}, '{{ hq.name|escapejs }}')" class="mt-4 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-colors uppercase text-sm tracking-wide shadow-lg shadow-red-600/30">
+                    {% t "Show on Map" %}
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- The Locator Split-Layout -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 px-0 md:px-4 mb-24 relative">
+            
+            <!-- Left Column (List) -->
+            <div class="lg:col-span-5 flex flex-col gap-4 lg:h-[700px] overflow-y-auto pr-2 no-scrollbar">
+                {% if not branches and not hq %}
+                    <p class="text-slate-500 text-center py-12">{% t "No branches found." %}</p>
+                {% endif %}
+
+                {% for branch in branches %}
+                <div class="bg-white border border-slate-100 rounded-2xl p-6 cursor-pointer shadow-sm hover:shadow-md hover:border-red-300 transition-all duration-300 group" onclick="focusMap({{ branch.latitude|unlocalize }}, {{ branch.longitude|unlocalize }}, '{{ branch.name|escapejs }}')">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-red-600 transition-colors">{{ branch.name }}</h3>
+                    <p class="text-slate-600 mb-4 text-sm">{{ branch.address }}</p>
+                    
+                    <div class="flex flex-col gap-2 text-sm">
+                        {% if branch.phone %}
+                        <div class="flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <span>{{ branch.phone }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if branch.email %}
+                        <div class="flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>{{ branch.email }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right Column (Map) -->
+            <div class="lg:col-span-7 h-[400px] lg:h-[700px] lg:sticky lg:top-24 rounded-3xl overflow-hidden shadow-inner bg-slate-100 z-0" id="yandex-map">
+                <!-- Map loads here -->
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Invisible Scroll for Branch List */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+</style>
+
+<!-- Yandex Maps Script -->
+<script src="https://api-maps.yandex.ru/2.1/?lang={{ request.LANGUAGE_CODE|default:'ru' }}_RU" type="text/javascript"></script>
+<script>
+    let contactsMap;
+    
+    // Store all branches (including HQ) to place markers
+    const branchLocations = [
+        {% if hq %}
+        {
+            lat: {{ hq.latitude|unlocalize }},
+            lng: {{ hq.longitude|unlocalize }},
+            name: "{{ hq.name|escapejs }}",
+            address: "{{ hq.address|escapejs }}",
+            isHq: true
+        },
+        {% endif %}
+        {% for branch in branches %}
+        {
+            lat: {{ branch.latitude|unlocalize }},
+            lng: {{ branch.longitude|unlocalize }},
+            name: "{{ branch.name|escapejs }}",
+            address: "{{ branch.address|escapejs }}",
+            isHq: false
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    ymaps.ready(initMap);
+
+    function initMap() {
+        // Default center (can be first branch or Yerevan)
+        let centerLat = branchLocations.length > 0 ? branchLocations[0].lat : 40.1872;
+        let centerLng = branchLocations.length > 0 ? branchLocations[0].lng : 44.5152;
+
+        contactsMap = new ymaps.Map("yandex-map", {
+            center: [centerLat, centerLng],
+            zoom: 12,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+
+        // Add Placemarks
+        branchLocations.forEach(loc => {
+            let placemark = new ymaps.Placemark([loc.lat, loc.lng], {
+                hintContent: loc.name,
+                balloonContentHeader: `<b>${loc.name}</b>`,
+                balloonContentBody: `<p>${loc.address}</p>`
+            }, {
+                preset: loc.isHq ? 'islands#redDotIcon' : 'islands#blueDotIcon'
+            });
+            contactsMap.geoObjects.add(placemark);
+        });
+        
+        // Auto-fit bounds if multiple branches exist
+        if (branchLocations.length > 1) {
+            contactsMap.setBounds(contactsMap.geoObjects.getBounds(), {
+                checkZoomRange: true,
+                zoomMargin: 30
+            });
+        }
+    }
+
+    function focusMap(lat, lng, name) {
+        if(contactsMap) {
+            contactsMap.setCenter([lat, lng], 15, {
+                checkZoomRange: true,
+                duration: 500
+            });
+            // Optional: iterate through geoObjects to open the specific balloon if desired
+            // For now, smooth centering is sufficient.
+        }
+        
+        // On mobile, scroll down to the map smoothly
+        if(window.innerWidth < 1024) {
+            document.getElementById('yandex-map').scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+    }
+</script>
+{% endblock %}

@@ -151,6 +151,7 @@ class HeroBanner(models.Model):
         ('BLOG_LIST', 'Blog List Page'),
         ('BLOG_POST', 'Blog Post Inner Page'),
         ('PARTNERS', 'Partners Page'),
+        ('PARTNERSHIP', 'Partnership (B2B) Page'),
         ('PRODUCTS', 'Products List Page'),
         ('ABOUT', 'About Us Page'),
         ('CAREERS', 'Careers Page'),

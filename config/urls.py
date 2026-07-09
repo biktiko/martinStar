@@ -7,11 +7,12 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
-from apps.core.views import index, about
+from apps.core.views import index, about, partnership_view, contacts_view, careers_view, apply_job_view
 from apps.catalog.views import category_products_view, product_detail_view, products_view
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
+    path('api/apply/', apply_job_view, name='apply_job'),
     # Non-translatable URLs can go here
 ]
 
@@ -19,6 +20,9 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('about/', about, name='about'),
+    path('partnership/', partnership_view, name='partnership'),
+    path('contacts/', contacts_view, name='contacts'),
+    path('careers/', careers_view, name='careers'),
     path('products/', products_view, name='products'),
     path('blog/', include('apps.blog.urls')),
     path('editorjs/', include('django_editorjs_fields.urls')),

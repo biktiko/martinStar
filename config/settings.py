@@ -130,6 +130,10 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Email settings
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='webmaster@localhost')
+
 # TinyMCE Configuration
 TINYMCE_DEFAULT_CONFIG = {
     'height': 300,

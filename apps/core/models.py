@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.cache import cache
+from apps.core.image_optimization import optimize_image
+from django_editorjs_fields import EditorJsJSONField
 
 class SiteSettings(models.Model):
     class MobileGridOptions(models.TextChoices):
@@ -14,6 +16,25 @@ class SiteSettings(models.Model):
     )
 
     featured_news_layout = models.CharField(
+        max_length=10,
+        blank=True,
+    )
+
+    logistics_layout = models.CharField(
+        max_length=10,
+        choices=[('SPLIT', 'Modern Split Grid'), ('CARD', 'Floating Card Over Banner')],
+        default='SPLIT',
+        help_text="Toggle the visual style of the Logistics section on the partnership page."
+    )
+
+    hr_email = models.EmailField(
+        default='hr@martinstar.am',
+        help_text="Main email for receiving job applications."
+    )
+    hr_cc_emails = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma-separated list of CC emails (e.g., marketing@martinstar.am, ceo@martinstar.am)."
     )
 
     class Meta:
@@ -108,3 +129,88 @@ class CompanyHistory(models.Model):
         return f"{self.year} - {self.title}"
 
 
+class PartnerLogo(models.Model):
+    name = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='partners/', help_text="Partner logo (transparent PNG/SVG recommended)")
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Partner Logo'
+        verbose_name_plural = 'Partner Logos'
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.logo and not self.logo.name.lower().endswith(('.webp', '.svg', '.gif')):
+            self.logo = optimize_image(self.logo)
+        super().save(*args, **kwargs)
+
+
+class ExportCountry(models.Model):
+    REGION_CHOICES = [
+        ('Australia', 'Australia & Oceania'),
+        ('Asia', 'Asia'),
+        ('North America', 'North America'),
+        ('South America', 'South America'),
+        ('Africa', 'Africa'),
+        ('Europe', 'Europe'),
+    ]
+    name = models.CharField(max_length=100, help_text="Название страны (например: Россия)")
+    map_code = models.CharField(max_length=5, help_text="Код страны для карты (ISO 3166-1 alpha-2, например: RU, US, AM)")
+    region = models.CharField(max_length=50, choices=REGION_CHOICES, default='Europe')
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Export Country'
+        verbose_name_plural = 'Export Countries'
+        ordering = ['region', 'name']
+
+    def __str__(self):
+        return f"{self.name} ({self.map_code})"
+
+class BranchOffice(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=500)
+    phone = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, help_text="Yandex Map Latitude (e.g., 40.1872)")
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, help_text="Yandex Map Longitude (e.g., 44.5152)")
+    is_headquarters = models.BooleanField(default=False, help_text="Pin this as the main HQ at the top of the page")
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-is_headquarters', 'order']
+        verbose_name = 'Branch Office'
+        verbose_name_plural = 'Branch Offices'
+
+    def __str__(self):
+        return self.name
+
+
+class Vacancy(models.Model):
+    title = models.CharField(max_length=255)
+    department = models.CharField(max_length=100, blank=True)
+    description = EditorJsJSONField(
+        plugins=[
+            "@editorjs/paragraph",
+            "@editorjs/header",
+            "@editorjs/list",
+            "@editorjs/marker",
+        ],
+        null=True,
+        blank=True,
+        help_text="Full vacancy description using blocks."
+    )
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Vacancy'
+        verbose_name_plural = 'Vacancies'
+
+    def __str__(self):
+        return self.title

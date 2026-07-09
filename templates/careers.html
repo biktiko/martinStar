@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+{% load static core_tags %}
+
+{% block title %}Martin Star - {% t "Careers" %}{% endblock %}
+
+{% block content %}
+<div class="pt-24 pb-12">
+    <!-- Hero Section -->
+    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 uppercase tracking-tight text-center mt-12 mb-6">{% t "Join the Team" %}</h1>
+    <div class="text-center mb-24">
+        <span class="text-6xl md:text-8xl font-black text-red-600">450+</span>
+        <p class="text-lg text-slate-500 uppercase tracking-widest mt-2">{% t "Employees" %}</p>
+    </div>
+
+    <!-- Values / Split Grid (Slider on mobile) -->
+    <div class="flex flex-nowrap md:grid md:grid-cols-2 gap-6 md:gap-12 max-w-6xl mx-auto px-4 mb-24 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4 md:pb-0">
+        <!-- We Offer -->
+        <div class="bg-slate-50 p-8 md:p-12 rounded-3xl border border-slate-100 min-w-[85vw] md:min-w-0 snap-center shrink-0">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 uppercase tracking-wide">{% t "We Offer" %}</h2>
+            <ul class="space-y-6">
+                <li class="flex items-start gap-4">
+                    <svg class="w-6 h-6 text-red-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Stability & Growth" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "A reliable workplace in an international company with continuous opportunities for professional growth." %}</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-4">
+                    <svg class="w-6 h-6 text-red-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Modern Resources" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "Access to cutting-edge tools, modern facilities, and a comfortable working environment." %}</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-4">
+                    <svg class="w-6 h-6 text-red-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Competitive Benefits" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "Attractive salary packages, health resources, and performance-based bonuses." %}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- We Look For -->
+        <div class="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-xl shadow-slate-100 min-w-[85vw] md:min-w-0 snap-center shrink-0">
+            <h2 class="text-2xl font-bold text-slate-900 mb-8 uppercase tracking-wide">{% t "We Look For" %}</h2>
+            <ul class="space-y-6">
+                <li class="flex items-start gap-4">
+                    <div class="w-2 h-8 bg-red-600 rounded-sm flex-shrink-0 mt-1"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Ambition & Drive" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "Professionals who are eager to achieve results and take ownership of their projects." %}</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-4">
+                    <div class="w-2 h-8 bg-red-600 rounded-sm flex-shrink-0 mt-1"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Team Collaboration" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "Strong communicators who thrive in cross-functional teams and value mutual respect." %}</p>
+                    </div>
+                </li>
+                <li class="flex items-start gap-4">
+                    <div class="w-2 h-8 bg-red-600 rounded-sm flex-shrink-0 mt-1"></div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">{% t "Problem Solving" %}</h3>
+                        <p class="text-slate-600 mt-1">{% t "Innovative thinkers who can overcome challenges and continuously improve processes." %}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Vacancies Accordion -->
+    <div class="max-w-4xl mx-auto px-4 mb-24">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 text-center uppercase tracking-wide mb-12">{% t "Open Positions" %}</h2>
+        
+        {% if not vacancies %}
+            <div class="text-center py-12 bg-slate-50 rounded-2xl border border-slate-200">
+                <p class="text-slate-500 text-lg">{% t "There are currently no open positions. However, you can still send us your CV!" %}</p>
+                <button onclick="openApplyModal('General Application')" class="mt-6 px-8 py-3 bg-red-600 text-white font-bold rounded-full uppercase tracking-wide hover:bg-red-700 shadow-md">{% t "Send CV" %}</button>
+            </div>
+        {% else %}
+            <div class="space-y-2">
+                {% for vacancy in vacancies %}
+                <div class="vacancy-item">
+                    <button class="w-full text-left py-6 px-8 bg-white border border-slate-200 rounded-2xl hover:border-red-600 transition-colors flex justify-between items-center shadow-sm" onclick="toggleAccordion(this)">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">{{ vacancy.title }}</h3>
+                            {% if vacancy.department %}
+                                <span class="text-sm text-slate-500 uppercase tracking-wider">{{ vacancy.department }}</span>
+                            {% endif %}
+                        </div>
+                        <svg class="w-6 h-6 text-slate-400 transform transition-transform duration-300 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </button>
+                    
+                    <!-- Accordion Body -->
+                    <div class="accordion-body hidden px-8 py-6 bg-slate-50 border border-t-0 border-slate-200 rounded-b-2xl -mt-4 mb-4">
+                        <div class="prose prose-slate max-w-none mb-8 text-slate-700">
+                            {% if vacancy.description and vacancy.description.blocks %}
+                                {% for block in vacancy.description.blocks %}
+                                    {% if block.type|lower == 'paragraph' %}
+                                        <p>{{ block.data.text|safe }}</p>
+                                    {% elif block.type|lower == 'header' %}
+                                        {% if block.data.level == 2 %}
+                                            <h2>{{ block.data.text|safe }}</h2>
+                                        {% elif block.data.level == 3 %}
+                                            <h3>{{ block.data.text|safe }}</h3>
+                                        {% elif block.data.level == 4 %}
+                                            <h4>{{ block.data.text|safe }}</h4>
+                                        {% else %}
+                                            <h2>{{ block.data.text|safe }}</h2>
+                                        {% endif %}
+                                    {% elif block.type|lower == 'list' %}
+                                        {% if block.data.style == 'ordered' %}
+                                            <ol>
+                                                {% for item in block.data.items %}
+                                                    <li>{{ item|safe }}</li>
+                                                {% endfor %}
+                                            </ol>
+                                        {% else %}
+                                            <ul>
+                                                {% for item in block.data.items %}
+                                                    <li>{{ item|safe }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p>No description available.</p>
+                            {% endif %}
+                        </div>
+                        <button onclick="openApplyModal('{{ vacancy.title|escapejs }}')" class="px-8 py-3 bg-red-600 text-white font-bold rounded-full uppercase tracking-wide hover:bg-red-700 shadow-md transition-transform hover:scale-105">
+                            {% t "Apply Now" %}
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- Apply Modal Overlay -->
+<div id="apply-modal" class="fixed inset-0 bg-slate-900/80 z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="apply-modal-content">
+        <!-- Header -->
+        <div class="flex justify-between items-center p-6 md:p-8 border-b border-slate-100">
+            <div>
+                <h3 class="text-2xl font-bold text-slate-900 uppercase">{% t "Apply for" %}</h3>
+                <p id="modal-vacancy-title" class="text-red-600 font-semibold mt-1"></p>
+            </div>
+            <button onclick="closeApplyModal()" class="text-slate-400 hover:text-slate-700 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <!-- Body Form -->
+        <div class="p-6 md:p-8 max-h-[70vh] overflow-y-auto">
+            <form id="apply-form" class="space-y-6">
+                {% csrf_token %}
+                <input type="hidden" name="vacancy_title" id="input-vacancy-title">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">{% t "Full Name *" %}</label>
+                        <input type="text" name="name" required class="bg-slate-50 rounded-xl px-4 py-3 w-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-600 transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">{% t "Phone *" %}</label>
+                        <input type="tel" name="phone" required class="bg-slate-50 rounded-xl px-4 py-3 w-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-600 transition-shadow">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">{% t "Email *" %}</label>
+                    <input type="email" name="email" required class="bg-slate-50 rounded-xl px-4 py-3 w-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-600 transition-shadow">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">{% t "Attach CV / Portfolio *" %}</label>
+                    <input type="file" name="cv_file" required accept=".pdf,.doc,.docx" class="bg-slate-50 rounded-xl px-4 py-3 w-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-600 transition-shadow file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-600 hover:file:bg-red-100">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">{% t "Cover Letter / Message" %}</label>
+                    <textarea name="message" rows="4" class="bg-slate-50 rounded-xl px-4 py-3 w-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-red-600 transition-shadow resize-none"></textarea>
+                </div>
+
+                <div class="pt-4 flex justify-end">
+                    <button type="submit" id="apply-submit-btn" class="w-full md:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-red-600 transition-colors uppercase tracking-wide">
+                        {% t "Submit Application" %}
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Success State -->
+            <div id="apply-success" class="hidden py-12 text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900 mb-4">{% t "Application Sent!" %}</h3>
+                <p class="text-slate-600">{% t "Thank you for your interest. Our HR team will review your application and contact you soon." %}</p>
+                <button onclick="closeApplyModal()" class="mt-8 px-8 py-3 bg-slate-900 text-white font-bold rounded-full uppercase tracking-wide hover:bg-slate-800">{% t "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Accordion Logic
+    function toggleAccordion(button) {
+        const body = button.nextElementSibling;
+        const icon = button.querySelector('.accordion-icon');
+        
+        // Check if currently hidden
+        const isHidden = body.classList.contains('hidden');
+        
+        // Close all other accordions first (optional, for true accordion behavior)
+        document.querySelectorAll('.accordion-body').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.accordion-icon').forEach(el => el.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>');
+        document.querySelectorAll('.vacancy-item button').forEach(el => {
+            el.classList.remove('border-red-600', 'rounded-t-2xl');
+            el.classList.add('rounded-2xl', 'border-slate-200');
+        });
+
+        if (isHidden) {
+            body.classList.remove('hidden');
+            // Change icon to minus
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>';
+            button.classList.remove('rounded-2xl', 'border-slate-200');
+            button.classList.add('border-red-600', 'rounded-t-2xl');
+        }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('apply-modal');
+    const modalContent = document.getElementById('apply-modal-content');
+    const form = document.getElementById('apply-form');
+    const successView = document.getElementById('apply-success');
+    
+    function openApplyModal(title) {
+        document.getElementById('modal-vacancy-title').innerText = title;
+        document.getElementById('input-vacancy-title').value = title;
+        
+        // Reset view
+        form.classList.remove('hidden');
+        successView.classList.add('hidden');
+        form.reset();
+
+        modal.classList.remove('hidden');
+        // Small timeout to allow display:block to apply before animating opacity
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+        }, 10);
+        
+        document.body.style.overflow = 'hidden'; // Prevent scrolling background
+    }
+
+    function closeApplyModal() {
+        modal.classList.add('opacity-0');
+        modalContent.classList.add('scale-95');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    // Close on click outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeApplyModal();
+        }
+    });
+
+    // Handle Form Submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('apply-submit-btn');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = '{% t "Sending..." %}';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+        const formData = new FormData(form);
+
+        fetch("{% url 'apply_job' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                form.classList.add('hidden');
+                successView.classList.remove('hidden');
+            } else {
+                alert('{% t "An error occurred. Please try again." %}');
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('{% t "Network error. Please try again." %}');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        });
+    });
+</script>
+{% endblock %}

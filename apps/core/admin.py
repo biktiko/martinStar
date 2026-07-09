@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import SiteSettings, FooterCompanyLink, FooterSettings, CompanyHistory
+from .models import SiteSettings, FooterCompanyLink, FooterSettings, CompanyHistory, PartnerLogo, ExportCountry, BranchOffice, Vacancy
 
 class FooterCompanyLinkInline(TranslationTabularInline, TabularInline):
     model = FooterCompanyLink
@@ -13,7 +13,10 @@ class FooterCompanyLinkInline(TranslationTabularInline, TabularInline):
 class SiteSettingsAdmin(ModelAdmin):
     fieldsets = (
         ('General', {
-            'fields': ('mobile_grid_layout', 'featured_news_layout')
+            'fields': ('mobile_grid_layout', 'featured_news_layout', 'logistics_layout')
+        }),
+        ('HR & Careers', {
+            'fields': ('hr_email', 'hr_cc_emails')
         }),
     )
 
@@ -57,3 +60,31 @@ class CompanyHistoryAdmin(ModelAdmin, TranslationAdmin):
     list_editable = ('is_active', 'order')
     search_fields = ('year', 'title', 'description')
     ordering = ('year',)
+
+@admin.register(PartnerLogo)
+class PartnerLogoAdmin(ModelAdmin):
+    list_display = ('name', 'is_active', 'order')
+    list_editable = ('is_active', 'order')
+    search_fields = ('name',)
+    list_filter = ('is_active',)
+
+@admin.register(ExportCountry)
+class ExportCountryAdmin(ModelAdmin):
+    list_display = ('name', 'map_code', 'region', 'is_active')
+    list_editable = ('is_active', 'region', 'map_code')
+    search_fields = ('name', 'map_code')
+    list_filter = ('region', 'is_active')
+
+@admin.register(BranchOffice)
+class BranchOfficeAdmin(ModelAdmin):
+    list_display = ('name', 'address', 'phone', 'is_headquarters', 'order')
+    list_editable = ('is_headquarters', 'order')
+    search_fields = ('name', 'address', 'phone', 'email')
+    list_filter = ('is_headquarters',)
+
+@admin.register(Vacancy)
+class VacancyAdmin(ModelAdmin):
+    list_display = ('title', 'department', 'is_active', 'order')
+    list_editable = ('is_active', 'order')
+    search_fields = ('title', 'department', 'description')
+    list_filter = ('department', 'is_active')
