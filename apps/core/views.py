@@ -119,7 +119,10 @@ def careers_view(request):
     return render(request, 'careers.html', context)
 
 def apply_job_view(request):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+    
+    try:
         name = request.POST.get('name') or request.GET.get('name', '')
         phone = request.POST.get('phone') or request.GET.get('phone', '')
         email = request.POST.get('email') or request.GET.get('email', '')
@@ -130,7 +133,7 @@ def apply_job_view(request):
         settings_obj = SiteSettings.load()
         
         to_email = settings_obj.hr_email if settings_obj.hr_email else 'hr@martinstar.am'
-        cc_emails = [email.strip() for email in settings_obj.hr_cc_emails.split(',')] if settings_obj.hr_cc_emails else []
+        cc_emails = [e.strip() for e in settings_obj.hr_cc_emails.split(',')] if settings_obj.hr_cc_emails else []
         cc_emails = [e for e in cc_emails if e] # remove empty strings
 
         subject = f"New Job Application: {vacancy_title}"
@@ -145,19 +148,19 @@ def apply_job_view(request):
         {message}
         """
 
-        try:
-            email_msg = EmailMessage(
-                subject,
-                body,
-                settings.DEFAULT_FROM_EMAIL,
-                [to_email],
-                cc=cc_emails
-            )
-            if cv_file:
-                email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
-                
-            email_msg.send(fail_silently=True)
-            return JsonResponse({"status": "success"})
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=500)
-    return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+        email_msg = EmailMessage(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [to_email],
+            cc=cc_emails
+        )
+        if cv_file:
+            email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
+            
+        email_msg.send(fail_silently=True)
+        return JsonResponse({"status": "success"})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({"status": "error", "message": str(e) or repr(e)}, status=500)
