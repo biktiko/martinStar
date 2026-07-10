@@ -302,7 +302,7 @@
                 form.classList.add('hidden');
                 successView.classList.remove('hidden');
             } else {
-                alert('{% t "An error occurred. Please try again." %}');
+                alert('{% t "An error occurred. Please try again." %}\\nError: ' + (data.message || 'Unknown error'));
                 submitBtn.innerText = originalText;
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');

@@ -156,7 +156,7 @@ def apply_job_view(request):
             if cv_file:
                 email_msg.attach(cv_file.name, cv_file.read(), cv_file.content_type)
                 
-            email_msg.send(fail_silently=False)
+            email_msg.send(fail_silently=True)
             return JsonResponse({"status": "success"})
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)}, status=500)

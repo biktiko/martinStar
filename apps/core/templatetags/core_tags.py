@@ -106,7 +106,7 @@ TRANSLATIONS = {
     'Phone *': {'ru': 'Телефон *', 'hy': 'Հեռախոս *', 'en': 'Phone *'},
     'Email *': {'ru': 'Email *', 'hy': 'Էլ․ փոստ *', 'en': 'Email *'},
     'Attach CV / Portfolio *': {'ru': 'Прикрепить резюме / портфолио *', 'hy': 'Կցել ինքնակենսագրական / պորտֆոլիո *', 'en': 'Attach CV / Portfolio *'},
-    'Cover Letter / Message': {'ru': 'Сопроводительное письмо / Сообщение', 'hy': 'Ուղեկցող նամակ / Հաղորդագրություն', 'en': 'Cover Letter / Message'},
+    'Cover Letter / Message': {'ru': 'Сопроводительное письмо', 'hy': 'Ուղեկցող նամակ', 'en': 'Cover Letter'},
     'Submit Application': {'ru': 'Отправить заявку', 'hy': 'Ուղարկել դիմումը', 'en': 'Submit Application'},
     'Sending...': {'ru': 'Отправка...', 'hy': 'Ուղարկվում է...', 'en': 'Sending...'},
     'An error occurred. Please try again.': {'ru': 'Произошла ошибка. Пожалуйста, попробуйте еще раз.', 'hy': 'Տեղի է ունեցել սխալ։ Խնդրում ենք կրկին փորձել։', 'en': 'An error occurred. Please try again.'},
