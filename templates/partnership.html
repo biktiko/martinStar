@@ -66,15 +66,15 @@
 
         {% elif global_settings.logistics_layout == 'CARD' %}
             <!-- Layout Variant B: Floating Card Over Banner -->
-            <div class="relative w-full h-[400px] md:h-[500px] overflow-hidden">
+            <div class="relative w-full min-h-[500px] flex flex-col justify-end overflow-hidden">
                 <!-- Full-width immersive background -->
                 <img src="{% static 'images/logistics_truck.png' %}" alt="Martin Logistics" class="absolute inset-0 w-full h-full object-cover">
                 
                 <!-- Overlay gradient for better text readability (optional but good for this layout) -->
-                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/60 to-transparent"></div>
 
                 <!-- Floating Content Card -->
-                <div class="absolute bottom-6 left-4 right-4 md:bottom-12 md:left-12 md:right-auto bg-white p-6 md:p-10 rounded-2xl shadow-2xl max-w-xl border border-slate-50/50">
+                <div class="relative z-10 m-4 mt-32 md:absolute md:bottom-12 md:left-12 md:m-0 bg-white p-6 md:p-10 rounded-2xl shadow-2xl max-w-xl border border-slate-50/50">
                     <div class="space-y-6">
                         <div class="flex items-center gap-4">
                             <div class="w-2 h-8 bg-red-600 rounded-sm"></div>
@@ -173,6 +173,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
+{{ block.super }}
 <!-- jsVectorMap scripts -->
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>

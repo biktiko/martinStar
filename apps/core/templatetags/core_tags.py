@@ -124,3 +124,10 @@ def t(context, text):
     lang = getattr(context.get('request'), 'LANGUAGE_CODE', 'hy')
     return TRANSLATIONS.get(text, {}).get(lang, text)
 
+@register.filter(name='split')
+def split(value, key):
+    """
+    Returns the value turned into a list, stripping whitespace.
+    """
+    return [v.strip() for v in value.split(key)]
+
