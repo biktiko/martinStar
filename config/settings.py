@@ -130,14 +130,31 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email settings
-EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend')
+# Anymail / Email settings
+ANYMAIL = {}
+if env('RESEND_API_KEY', default=''):
+    ANYMAIL['RESEND_API_KEY'] = env('RESEND_API_KEY')
+    EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+elif env('SENDGRID_API_KEY', default=''):
+    ANYMAIL['SENDGRID_API_KEY'] = env('SENDGRID_API_KEY')
+    EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
+elif env('MAILGUN_API_KEY', default=''):
+    ANYMAIL['MAILGUN_API_KEY'] = env('MAILGUN_API_KEY')
+    ANYMAIL['MAILGUN_SENDER_DOMAIN'] = env('MAILGUN_SENDER_DOMAIN', default='')
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+elif env('MAILJET_API_KEY', default=''):
+    ANYMAIL['MAILJET_API_KEY'] = env('MAILJET_API_KEY')
+    ANYMAIL['MAILJET_SECRET_KEY'] = env('MAILJET_SECRET_KEY', default='')
+    EMAIL_BACKEND = 'anymail.backends.mailjet.EmailBackend'
+else:
+    EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend')
+
 EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = env.int('EMAIL_PORT', default=587)
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
-EMAIL_TIMEOUT = env.int('EMAIL_TIMEOUT', default=5)
+EMAIL_TIMEOUT = env.int('EMAIL_TIMEOUT', default=10)
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER)
 
 # TinyMCE Configuration
