@@ -167,5 +167,49 @@
         });
     </script>
     {% endblock %}
+
+    <!-- Page Transition Loader -->
+    <style>
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background-color: #ef4444; /* red-500 */
+            z-index: 9999;
+            transition: width 0.3s ease;
+            opacity: 0;
+        }
+    </style>
+    <div id="page-loader"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('page-loader');
+            
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.startsWith('#') && !href.startsWith('tel:') && !href.startsWith('mailto:') && link.target !== '_blank' && !e.ctrlKey && !e.metaKey) {
+                        loader.style.opacity = '1';
+                        loader.style.width = '30%';
+                        setTimeout(() => loader.style.width = '60%', 300);
+                        setTimeout(() => loader.style.width = '85%', 800);
+                    }
+                });
+            });
+
+            window.addEventListener('pageshow', () => {
+                loader.style.width = '100%';
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.width = '0%', 300);
+                }, 200);
+            });
+        });
+    </script>
+    
+    <!-- instant.page for SPA-like fast navigation -->
+    <script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZCGoO00E9HjX2/jw5S4u+hA10gAofE5A1QfGkE5TgeX/5xLz5Bq6t0oX1R8n5g"></script>
 </body>
 </html>
