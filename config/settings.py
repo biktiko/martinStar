@@ -51,8 +51,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Analytics middleware
-    'apps.analytics.middleware.AmplitudeMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

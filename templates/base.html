@@ -225,5 +225,38 @@
     })();
     </script>
     <!--End of Tawk.to Script-->
+
+    <!-- Amplitude Analytics -->
+    {% if amplitude_api_key %}
+    <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
+    <script>
+        const userId = {% if request.user.is_authenticated %}'{{ request.user.id }}'{% else %}undefined{% endif %};
+        window.amplitude.init('{{ amplitude_api_key }}', userId, {
+            defaultTracking: {
+                pageViews: true,
+                sessions: true,
+                formInteractions: true,
+                fileDownloads: true,
+            }
+        });
+
+        // Autocapture for all links and buttons
+        document.addEventListener('click', function(e) {
+            let target = e.target.closest('a, button');
+            if (target) {
+                let eventName = target.tagName.toLowerCase() === 'a' ? 'Link Clicked' : 'Button Clicked';
+                let text = (target.innerText || target.value || target.title || '').trim().substring(0, 100);
+                if (!text && target.querySelector('svg')) text = 'Icon Button';
+                
+                window.amplitude.track(eventName, {
+                    text: text,
+                    id: target.id || undefined,
+                    href: target.getAttribute('href') || undefined,
+                    section: target.closest('section') ? (target.closest('section').id || target.closest('section').className) : undefined
+                });
+            }
+        });
+    </script>
+    {% endif %}
 </body>
 </html>
