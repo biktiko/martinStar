@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from .models import Category, Product, Brand, HeroBanner
@@ -58,3 +59,21 @@ def product_detail_view(request, category_slug, product_slug):
         'categories': categories,
     }
     return render(request, 'catalog/product_detail.html', context)
+
+def search_products_view(request):
+    query = request.GET.get('q', '').strip()
+    products = Product.objects.none()
+    
+    if query:
+        products = Product.objects.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(options__barcode__icontains=query),
+            is_active=True
+        ).prefetch_related('options').distinct()
+        
+    context = {
+        'query': query,
+        'products': products,
+    }
+    return render(request, 'catalog/search_results.html', context)

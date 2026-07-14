@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from apps.core.views import index, about, partnership_view, contacts_view, careers_view, apply_job_view
-from apps.catalog.views import category_products_view, product_detail_view, products_view
+from apps.catalog.views import category_products_view, product_detail_view, products_view, search_products_view
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -27,6 +27,7 @@ urlpatterns += i18n_patterns(
     path('blog/', include('apps.blog.urls')),
     path('editorjs/', include('django_editorjs_fields.urls')),
     path('tinymce/', include('tinymce.urls')),
+    path('search/', search_products_view, name='search'),
     path('category/<slug:category_slug>/', category_products_view, name='category_products'),
     path('category/<slug:category_slug>/<slug:product_slug>/', product_detail_view, name='product_detail'),
     prefix_default_language=False, # Don't add /hy/ for the default language

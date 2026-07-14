@@ -50,14 +50,14 @@
 
                 <!-- Right: Search & Language -->
                 <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div class="relative hidden sm:block">
+                    <form action="{% url 'search' %}" method="GET" class="relative hidden sm:block">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
-                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% t 'Search products...' %}">
-                    </div>
+                        <input type="search" name="q" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm transition duration-150 ease-in-out" placeholder="{% t 'Search products...' %}" required>
+                    </form>
 
                     <!-- Mobile Search Button -->
                     <button type="button" id="mobile-search-btn" class="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-red-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors">
@@ -116,14 +116,14 @@
 
         <!-- Mobile Search Dropdown (Toggled by Search Button) -->
         <div id="mobile-search-container" class="hidden sm:hidden absolute w-full left-0 top-20 bg-white border-t border-gray-100 shadow-md p-4 z-40 transition-all duration-200">
-            <div class="relative max-w-7xl mx-auto">
+            <form action="{% url 'search' %}" method="GET" class="relative max-w-7xl mx-auto">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input type="text" id="mobile-search-input" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 text-base transition duration-150 ease-in-out shadow-sm" placeholder="{% t 'Search products...' %}">
-            </div>
+                <input type="search" name="q" id="mobile-search-input" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-1 focus:ring-red-500 focus:border-red-500 text-base transition duration-150 ease-in-out shadow-sm" placeholder="{% t 'Search products...' %}" required>
+            </form>
         </div>
     </header>
 
