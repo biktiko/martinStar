@@ -22,6 +22,7 @@ class ProductOptionInline(TabularInline):
 @admin.register(Product)
 class ProductAdmin(ModelAdmin, TranslationAdmin):
     list_display = ('name', 'category', 'brand', 'is_active')
+    list_select_related = ('category', 'brand')
     list_filter = ('is_active', 'category', 'brand')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
