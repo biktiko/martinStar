@@ -81,7 +81,6 @@ if "?pgbouncer=true" in db_url:
 db_config = environ.Env.db_url_config(db_url)
 db_config['CONN_MAX_AGE'] = 60
 db_config['CONN_HEALTH_CHECKS'] = True
-db_config['OPTIONS'] = {'DISABLE_SERVER_SIDE_CURSORS': True}
 
 DATABASES = {
     'default': db_config
