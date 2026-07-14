@@ -13,7 +13,7 @@ def index(request):
     brands = Brand.objects.all()
     categories = Category.objects.filter(is_active=True)
     
-    active_banners = HeroBanner.objects.filter(is_active=True)
+    active_banners = HeroBanner.objects.filter(is_active=True, placement='HOME')
     mobile_banners = [b for b in active_banners if b.show_on_mobile]
     desktop_banners = [b for b in active_banners if b.show_on_desktop]
     
