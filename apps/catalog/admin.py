@@ -21,7 +21,8 @@ class ProductOptionInline(TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin, TranslationAdmin):
-    list_display = ('name', 'category', 'brand', 'is_active')
+    list_display = ('name', 'category', 'brand', 'order', 'is_active')
+    list_editable = ('order', 'is_active')
     list_select_related = ('category', 'brand')
     list_filter = ('is_active', 'category', 'brand')
     search_fields = ('name', 'description')
@@ -30,7 +31,7 @@ class ProductAdmin(ModelAdmin, TranslationAdmin):
     
     fieldsets = (
         ('General Information', {
-            'fields': ('name', 'slug', 'category', 'brand', 'is_active', 'description', 'image')
+            'fields': ('name', 'slug', 'category', 'brand', 'order', 'is_active', 'description', 'image')
         }),
         ('Storage Requirements', {
             'fields': ('min_storage_temp', 'max_storage_temp', 'storage_period_days')

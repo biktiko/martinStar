@@ -70,6 +70,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     
     image = models.ImageField(upload_to='products/', help_text="Main cover photo for the product.")
+    order = models.IntegerField(default=0, help_text="Order for sorting products in category (lower is first)")
     
     # SEO fields
     meta_title = models.CharField(max_length=255, blank=True)
@@ -81,6 +82,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
+        ordering = ['order', '-id']
 
     def __str__(self):
         return self.name
