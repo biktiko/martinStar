@@ -135,6 +135,8 @@ class ProductOption(models.Model):
 
     def clean(self):
         super().clean()
+        if self.barcode == "":
+            self.barcode = None
         if self.is_active and not self.barcode:
             raise ValidationError({'barcode': 'Barcode is required to activate the product option.'})
 
