@@ -114,6 +114,7 @@ TRANSLATIONS = {
     'Application Sent!': {'ru': 'Заявка отправлена!', 'hy': 'Դիմումն ուղարկված է։', 'en': 'Application Sent!'},
     'Thank you for your interest. Our HR team will review your application and contact you soon.': {'ru': 'Спасибо за ваш интерес. Наша HR-команда рассмотрит вашу заявку и скоро свяжется с вами.', 'hy': 'Շնորհակալություն հետաքրքրության համար։ Մեր ՄՌ բաժինը կքննարկի ձեր դիմումը և շուտով կկապվի ձեզ հետ։', 'en': 'Thank you for your interest. Our HR team will review your application and contact you soon.'},
     'Close': {'ru': 'Закрыть', 'hy': 'Փակել', 'en': 'Close'},
+    'Brands': {'ru': 'Бренды', 'hy': 'Բրենդներ', 'en': 'Brands'},
     'Login': {'ru': 'Вход', 'hy': 'Մուտք', 'en': 'Login'},
     'Register': {'ru': 'Регистрация', 'hy': 'Գրանցում', 'en': 'Register'},
     'Welcome Back': {'ru': 'С возвращением', 'hy': 'Բարի վերադարձ', 'en': 'Welcome Back'},
@@ -130,6 +131,49 @@ TRANSLATIONS = {
     'Более персонализированный и быстрый подход в поддержке': {'ru': 'Более персонализированный и быстрый подход в поддержке', 'hy': 'Ավելի անհատականացված և արագ աջակցություն', 'en': 'A more personalized and faster approach to support'},
     'By registering, you get a': {'ru': 'Регистрируясь, вы получаете', 'hy': 'Գրանցվելով՝ դուք ստանում եք', 'en': 'By registering, you get a'},
     'Log out': {'ru': 'Выйти', 'hy': 'Դուրս գալ', 'en': 'Log out'},
+    'About Us': {'ru': 'О нас', 'hy': 'Մեր մասին', 'en': 'About Us'},
+    'Over the years of existence, from a small business producing roasted seeds, our company has grown into a powerful holding that implements all stages of a complex agricultural production process: from growing in our own fields to selling quality products on store shelves.': {
+        'ru': 'За годы существования из небольшого предприятия по производству жареных семечек наша компания выросла в мощный холдинг, реализующий все этапы сложного сельскохозяйственного производственного процесса: от выращивания на собственных полях до реализации качественной продукции на полках магазинов.',
+        'hy': 'Գոյության տարիների ընթացքում բոված արևածաղկի արտադրության փոքր ձեռնարկությունից մեր ընկերությունը վերածվել է հզոր հոլդինգի, որն իրականացնում է բարդ գյուղատնտեսական արտադրական գործընթացի բոլոր փուլերը՝ սեփական դաշտերում աճեցումից մինչև խանութների դարակներում որակյալ արտադրանքի վաճառք։',
+        'en': 'Over the years of existence, from a small business producing roasted seeds, our company has grown into a powerful holding that implements all stages of a complex agricultural production process: from growing in our own fields to selling quality products on store shelves.'
+    },
+    'Years on the market': {'ru': 'Лет на рынке', 'hy': 'Տարիներ շուկայում', 'en': 'Years on the market'},
+    'Countries': {'ru': 'Стран', 'hy': 'Երկրներ', 'en': 'Countries'},
+    'Commodity Items': {'ru': 'Товарных позиций', 'hy': 'Ապրանքատեսակներ', 'en': 'Commodity Items'},
+    'Our Advantages': {'ru': 'Наши преимущества', 'hy': 'Մեր առավելությունները', 'en': 'Our Advantages'},
+    'Customer confidence': {'ru': 'Доверие потребителей', 'hy': 'Սպառողների վստահությունը', 'en': 'Customer confidence'},
+    'We strive to create healthy and natural products for our clients all over the world, we try to satisfy their needs and exceed expectations.': {
+        'ru': 'Мы стремимся создавать здоровые и натуральные продукты для наших клиентов по всему миру, стараемся удовлетворить их потребности и превзойти ожидания.',
+        'hy': 'Մենք ձգտում ենք ստեղծել առողջ և բնական արտադրանք մեր հաճախորդների համար ամբողջ աշխարհում, փորձում ենք բավարարել նրանց կարիքները և գերազանցել սպասումները։',
+        'en': 'We strive to create healthy and natural products for our clients all over the world, we try to satisfy their needs and exceed expectations.'
+    },
+    'Own raw materials': {'ru': 'Собственное сырье', 'hy': 'Սեփական հումք', 'en': 'Own raw materials'},
+    'An important advantage of the holding is the availability of its own agricultural land, processing base, warehouses.': {
+        'ru': 'Важным преимуществом холдинга является наличие собственных сельскохозяйственных угодий, перерабатывающей базы, складов.',
+        'hy': 'Հոլդինգի կարևոր առավելություններից է սեփական գյուղատնտեսական հողատարածքների, վերամշակող բազայի և պահեստների առկայությունը։',
+        'en': 'An important advantage of the holding is the availability of its own agricultural land, processing base, warehouses.'
+    },
+    'Technological production': {'ru': 'Технологичное производство', 'hy': 'Տեխնոլոգիական արտադրություն', 'en': 'Technological production'},
+    'Constant updating of the technical base allows achieving high quality products and uninterrupted production cycle.': {
+        'ru': 'Постоянное обновление технической базы позволяет добиваться высокого качества продукции и бесперебойного производственного цикла.',
+        'hy': 'Տեխնիկական բազայի անընդհատ նորացումը թույլ է տալիս հասնել բարձրորակ արտադրանքի և անխափան արտադրական ցիկլի։',
+        'en': 'Constant updating of the technical base allows achieving high quality products and uninterrupted production cycle.'
+    },
+    'Quality control': {'ru': 'Контроль качества', 'hy': 'Որակի վերահսկողություն', 'en': 'Quality control'},
+    'All enterprises have modern quality control laboratories operating at all stages, from raw materials to final products.': {
+        'ru': 'На всех предприятиях работают современные лаборатории контроля качества на всех этапах, от сырья до готовой продукции.',
+        'hy': 'Բոլոր ձեռնարկություններն ունեն ժամանակակից որակի վերահսկման լաբորատորիաներ, որոնք գործում են բոլոր փուլերում՝ հումքից մինչև վերջնական արտադրանք։',
+        'en': 'All enterprises have modern quality control laboratories operating at all stages, from raw materials to final products.'
+    },
+    'Our History': {'ru': 'Наша история', 'hy': 'Մեր պատմությունը', 'en': 'Our History'},
+    'Quality raw materials': {'ru': 'Качественное сырье', 'hy': 'Որակյալ հումք', 'en': 'Quality raw materials'},
+    'Striving for higher standards': {'ru': 'Стремление к высоким стандартам', 'hy': 'Ձգտում դեպի բարձր չափանիշներ', 'en': 'Striving for higher standards'},
+    'Always High Quality': {'ru': 'Всегда высокое качество', 'hy': 'Միշտ բարձր որակ', 'en': 'Always High Quality'},
+    'To meet the highest expectations, we process thousands of tons of selected raw materials. Strict adherence to international standards and non-stop quality control guarantees that every product reaching your table delivers genuine taste and nutritional value. The company\'s goal is to establish long-term, mutually beneficial cooperation built on an impeccable reputation.': {
+        'ru': 'Чтобы соответствовать самым высоким ожиданиям, мы перерабатываем тысячи тонн отборного сырья. Строгое соблюдение международных стандартов и безостановочный контроль качества гарантируют, что каждый продукт, попадающий на ваш стол, обладает подлинным вкусом и пищевой ценностью. Цель компании - установление долгосрочного, взаимовыгодного сотрудничества, основанного на безупречной репутации.',
+        'hy': 'Ամենաբարձր սպասումներին համապատասխանելու համար մենք վերամշակում ենք հազարավոր տոննա ընտրված հումք: Միջազգային ստանդարտների խիստ պահպանումը և անդադար որակի վերահսկումը երաշխավորում են, որ ձեր սեղանին հասնող յուրաքանչյուր արտադրանքն ունի իսկական համ և սննդային արժեք: Ընկերության նպատակն է ստեղծել երկարաժամկետ, փոխշահավետ համագործակցություն՝ հիմնված անբասիր հեղինակության վրա:',
+        'en': 'To meet the highest expectations, we process thousands of tons of selected raw materials. Strict adherence to international standards and non-stop quality control guarantees that every product reaching your table delivers genuine taste and nutritional value. The company\'s goal is to establish long-term, mutually beneficial cooperation built on an impeccable reputation.'
+    },
 }
 
 @register.simple_tag(takes_context=True)
