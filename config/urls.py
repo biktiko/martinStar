@@ -25,6 +25,7 @@ urlpatterns += i18n_patterns(
     path('careers/', careers_view, name='careers'),
     path('products/', products_view, name='products'),
     path('blog/', include('apps.blog.urls')),
+    path('users/', include('apps.users.urls')),
     path('editorjs/', include('django_editorjs_fields.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('search/', search_products_view, name='search'),
