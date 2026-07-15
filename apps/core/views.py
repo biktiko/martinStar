@@ -6,27 +6,25 @@ from apps.core.forms import PartnershipForm
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.conf import settings
-from apps.catalog.models import Category, Brand, HeroBanner
+from django.core.paginator import Paginator
+from apps.catalog.models import Category, HeroBanner
 
 @cache_page(60 * 15)
 def index(request):
-    brands = Brand.objects.all()
-    categories = Category.objects.filter(is_active=True)
+    categories = Category.objects.filter(is_active=True).order_by('order', 'id')
+    
+    paginator = Paginator(categories, 9)
+    page_number = request.GET.get('page')
+    categories_page = paginator.get_page(page_number)
     
     active_banners = HeroBanner.objects.filter(is_active=True, placement='HOME')
     mobile_banners = [b for b in active_banners if b.show_on_mobile]
     desktop_banners = [b for b in active_banners if b.show_on_desktop]
     
-    selected_brands = request.GET.getlist('brand')
-    if selected_brands:
-        categories = categories.filter(brands__slug__in=selected_brands).distinct()
-        
     favourite_posts = Post.objects.filter(is_favourite=True, is_active=True).select_related('topic').order_by('-created_at')[:3]
         
     context = {
-        'categories': categories,
-        'brands': brands,
-        'selected_brands': selected_brands,
+        'categories': categories_page,
         'mobile_banners': mobile_banners,
         'desktop_banners': desktop_banners,
         'favourite_posts': favourite_posts,
