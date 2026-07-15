@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
     
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon_io/apple-touch-icon.png' %}">
@@ -28,12 +28,13 @@
 
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
             <div class="flex justify-between items-center h-20">
                 <!-- Left: Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{% url 'index' %}">
-                        <img class="h-12 w-auto object-contain" src="{% static 'images/logo.png' %}" alt="Martin Star Logo">
+                    <a href="{% url 'index' %}" class="flex items-center gap-2 sm:gap-3 group">
+                        <img class="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105" src="{% static 'images/logo.png' %}" alt="Martin Star Logo">
+                        <span class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-red-500 drop-shadow-sm whitespace-nowrap" style="font-family: 'Montserrat', sans-serif;">MARTIN STAR</span>
                     </a>
                 </div>
 
