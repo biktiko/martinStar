@@ -91,11 +91,15 @@
             <div class="flex flex-col lg:flex-row items-stretch min-h-0 lg:min-h-[calc(100vh-10rem)]">
                 
                 <!-- Left Column (40%): Mascot -->
-                <div class="hidden lg:flex w-full lg:w-[40%] flex-col justify-end pt-10 relative z-30">
+                <div class="hidden lg:flex w-full lg:w-[40%] flex-col justify-end pt-10 relative z-30 group cursor-default">
                     <!-- Mascot image anchored to the bottom -->
                     <img src="{% static 'images/GooseForMainPage.png' %}" 
                          alt="Martin Star Mascot" 
-                         class="w-full h-auto object-bottom object-contain z-10 origin-bottom scale-110 lg:scale-125 transform lg:translate-x-8">
+                         class="absolute bottom-0 w-full h-auto object-bottom object-contain z-10 origin-bottom scale-110 lg:scale-125 transform lg:translate-x-8 transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+                    <!-- Winking Mascot image -->
+                    <img src="{% static 'images/GooseForMainPage2.png' %}" 
+                         alt="Martin Star Mascot Winking" 
+                         class="relative w-full h-auto object-bottom object-contain z-10 origin-bottom scale-110 lg:scale-125 transform lg:translate-x-8 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                 </div>
 
                 <!-- Right Column (60%): Category Grid -->
