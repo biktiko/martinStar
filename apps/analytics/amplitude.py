@@ -28,7 +28,7 @@ class AmplitudeClient:
         }
 
         if user_id:
-            event["user_id"] = str(user_id)
+            event["user_id"] = f"user_{user_id}"
         if device_id:
             event["device_id"] = str(device_id)
             
