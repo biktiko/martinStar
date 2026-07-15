@@ -45,8 +45,8 @@
                 <h3 class="text-base font-bold text-gray-900 mb-3">{% t "Categories" %}</h3>
                 <nav class="space-y-1">
                     {% for cat in categories %}
-                    <a href="{% url 'category_products' cat.slug %}" 
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {% if cat.id == category.id %}bg-red-50 text-red-700 font-semibold shadow-inner{% else %}text-gray-600 hover:bg-gray-50 hover:text-gray-900{% endif %}">
+                    <a href="{% url 'category_products' cat.slug %}{% if selected_brand %}?brand={{ selected_brand }}{% endif %}" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {% if cat.id == category.id %}bg-red-50 text-red-700 font-bold text-base shadow-inner{% else %}text-gray-700 font-medium text-base hover:bg-gray-50 hover:text-gray-900{% endif %}">
                         {% if cat.image %}
                             <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-6 h-6 object-contain rounded-full bg-gray-50 p-0.5">
                         {% else %}
@@ -55,7 +55,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
                     {% endif %}
-                    <span class="text-sm">{{ cat.name }}</span>
+                    <span>{{ cat.name }}</span>
                     </a>
                     {% endfor %}
                 </nav>
@@ -75,8 +75,8 @@
                     <!-- Scrollable Nav -->
                     <nav id="cat-nav" class="flex flex-1 overflow-x-auto snap-x scrollbar-none gap-2 pb-1 pt-1" style="-ms-overflow-style: none; scrollbar-width: none;">
                         {% for cat in categories %}
-                        <a href="{% url 'category_products' cat.slug %}" 
-                           class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 border shadow-sm rounded-full text-sm font-medium whitespace-nowrap snap-start transition-colors {% if cat.id == category.id %}bg-red-600 text-white border-red-600{% else %}bg-white border-gray-200 text-gray-600 hover:bg-gray-50{% endif %}">
+                        <a href="{% url 'category_products' cat.slug %}{% if selected_brand %}?brand={{ selected_brand }}{% endif %}" 
+                           class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 border shadow-sm rounded-full text-base font-medium whitespace-nowrap snap-start transition-colors {% if cat.id == category.id %}bg-red-600 text-white font-bold border-red-600{% else %}bg-white border-gray-200 text-gray-700 hover:bg-gray-50{% endif %}">
                             {% if cat.image %}
                                 <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-5 h-5 object-contain rounded-full bg-gray-50 p-0.5">
                             {% endif %}

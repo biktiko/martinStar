@@ -53,7 +53,7 @@
             <!-- Category Grid -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 pb-20">
                 {% for cat in categories %}
-                    <a href="{% url 'category_products' cat.slug %}" class="group bg-white rounded-2xl p-4 lg:p-6 flex flex-col items-center border border-gray-100 hover:shadow-xl hover:border-red-100 transition-all duration-300">
+                    <a href="{% url 'category_products' cat.slug %}{% if selected_brand %}?brand={{ selected_brand }}{% endif %}" class="group bg-white rounded-2xl p-4 lg:p-6 flex flex-col items-center border border-gray-100 hover:shadow-xl hover:border-red-100 transition-all duration-300">
                         
                         <!-- Image Wrapper -->
                         <div class="w-full h-28 lg:h-40 flex items-center justify-center mb-4">

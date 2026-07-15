@@ -30,13 +30,13 @@ def category_products_view(request, category_slug):
     
     products = Product.objects.filter(category=category, is_active=True).prefetch_related('options')
     
-    # Get all brands that have products in this category
-    brand_ids = products.values_list('brand_id', flat=True).distinct()
-    brands = Brand.objects.filter(id__in=brand_ids)
+    # Show all brands, or we could filter by ones that have products. User requested to see all 2 brands.
+    brands = Brand.objects.all()
     
     selected_brand = request.GET.get('brand')
     if selected_brand:
         products = products.filter(brand__slug=selected_brand)
+        categories = categories.filter(brands__slug=selected_brand).distinct()
         
     context = {
         'category': category,
