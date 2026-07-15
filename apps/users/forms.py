@@ -5,7 +5,7 @@ from .models import CustomUser, UserProfile
 
 class RegistrationForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True, label=_("First Name"))
-    last_name = forms.CharField(max_length=30, required=True, label=_("Last Name"))
+    last_name = forms.CharField(max_length=30, required=False, label=_("Last Name"))
     email = forms.EmailField(required=True, label=_("Email"))
     phone_number = forms.CharField(max_length=20, required=False, label=_("Phone Number (Optional)"))
     password = forms.CharField(widget=forms.PasswordInput, required=True, label=_("Password"))

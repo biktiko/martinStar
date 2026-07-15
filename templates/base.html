@@ -38,14 +38,14 @@
                 </div>
 
                 <!-- Center: Navigation -->
-                <nav class="hidden lg:flex space-x-8">
-                    <a href="{% url 'index' %}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Home" %}</a>
-                    <a href="{% url 'products' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Products" %}</a>
-                    <a href="{% url 'post_list' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Blog" %}</a>
-                    <a href="{% url 'careers' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Careers" %}</a>
-                    <a href="{% url 'contacts' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Contacts" %}</a>
-                    <a href="{% url 'partnership' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "Partnership" %}</a>
-                    <a href="{% url 'about' %}" class="text-gray-500 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">{% t "About us" %}</a>
+                <nav class="hidden lg:flex space-x-4 xl:space-x-8">
+                    <a href="{% url 'index' %}" class="text-gray-900 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Home" %}</a>
+                    <a href="{% url 'products' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Products" %}</a>
+                    <a href="{% url 'post_list' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Blog" %}</a>
+                    <a href="{% url 'careers' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Careers" %}</a>
+                    <a href="{% url 'contacts' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Contacts" %}</a>
+                    <a href="{% url 'partnership' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "Partnership" %}</a>
+                    <a href="{% url 'about' %}" class="text-gray-500 hover:text-red-600 px-2 py-2 text-sm font-medium transition-colors whitespace-nowrap">{% t "About us" %}</a>
                 </nav>
 
                 <!-- Right: Search & Language -->
@@ -115,7 +115,7 @@
                     {% else %}
                     <a href="{% url 'login' %}" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-red-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 transition-colors" title="{% t 'Login' %}">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </a>
                     {% endif %}

@@ -114,6 +114,22 @@ TRANSLATIONS = {
     'Application Sent!': {'ru': 'Заявка отправлена!', 'hy': 'Դիմումն ուղարկված է։', 'en': 'Application Sent!'},
     'Thank you for your interest. Our HR team will review your application and contact you soon.': {'ru': 'Спасибо за ваш интерес. Наша HR-команда рассмотрит вашу заявку и скоро свяжется с вами.', 'hy': 'Շնորհակալություն հետաքրքրության համար։ Մեր ՄՌ բաժինը կքննարկի ձեր դիմումը և շուտով կկապվի ձեզ հետ։', 'en': 'Thank you for your interest. Our HR team will review your application and contact you soon.'},
     'Close': {'ru': 'Закрыть', 'hy': 'Փակել', 'en': 'Close'},
+    'Login': {'ru': 'Вход', 'hy': 'Մուտք', 'en': 'Login'},
+    'Register': {'ru': 'Регистрация', 'hy': 'Գրանցում', 'en': 'Register'},
+    'Welcome Back': {'ru': 'С возвращением', 'hy': 'Բարի վերադարձ', 'en': 'Welcome Back'},
+    "Don't have an account?": {'ru': 'Нет аккаунта?', 'hy': 'Չունե՞ք հաշիվ', 'en': "Don't have an account?"},
+    'Sign up': {'ru': 'Зарегистрироваться', 'hy': 'Գրանցվել', 'en': 'Sign up'},
+    'Sign in': {'ru': 'Войти', 'hy': 'Մուտք գործել', 'en': 'Sign in'},
+    'Why log in?': {'ru': 'Зачем входить?', 'hy': 'Ինչու՞ մուտք գործել', 'en': 'Why log in?'},
+    'Create an Account Now': {'ru': 'Создать аккаунт', 'hy': 'Ստեղծել հաշիվ', 'en': 'Create an Account Now'},
+    'Create an Account': {'ru': 'Создать аккаунт', 'hy': 'Ստեղծել հաշիվ', 'en': 'Create an Account'},
+    'Already have an account?': {'ru': 'Уже есть аккаунт?', 'hy': 'Արդեն ունե՞ք հաշիվ', 'en': 'Already have an account?'},
+    'Please correct the following errors:': {'ru': 'Пожалуйста, исправьте следующие ошибки:', 'hy': 'Խնդրում ենք ուղղել հետևյալ սխալները:', 'en': 'Please correct the following errors:'},
+    'Subscribe to our newsletter': {'ru': 'Подписаться на новости', 'hy': 'Բաժանորդագրվել նորություններին', 'en': 'Subscribe to our newsletter'},
+    'Возможность получения новостей на почту': {'ru': 'Возможность получения новостей на почту', 'hy': 'Նորություններ ստանալու հնարավորություն', 'en': 'Opportunity to receive news by email'},
+    'Более персонализированный и быстрый подход в поддержке': {'ru': 'Более персонализированный и быстрый подход в поддержке', 'hy': 'Ավելի անհատականացված և արագ աջակցություն', 'en': 'A more personalized and faster approach to support'},
+    'By registering, you get a': {'ru': 'Регистрируясь, вы получаете', 'hy': 'Գրանցվելով՝ դուք ստանում եք', 'en': 'By registering, you get a'},
+    'Log out': {'ru': 'Выйти', 'hy': 'Դուրս գալ', 'en': 'Log out'},
 }
 
 @register.simple_tag(takes_context=True)
