@@ -11,9 +11,9 @@ from apps.catalog.models import Category, HeroBanner
 
 @cache_page(60 * 15)
 def index(request):
-    categories = Category.objects.filter(is_active=True).order_by('order', 'id')
+    categories = Category.objects.filter(is_active=True).order_by('id')
     
-    paginator = Paginator(categories, 9)
+    paginator = Paginator(categories, 6)
     page_number = request.GET.get('page')
     categories_page = paginator.get_page(page_number)
     
