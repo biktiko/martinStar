@@ -171,6 +171,18 @@
 
 {% block extra_scripts %}
 {{ block.super }}
+<!-- Amplitude Event Tracking -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.amplitude) {
+            amplitude.track('Category Viewed', {
+                category_id: '{{ category.id }}',
+                category_name: '{{ category.name|escapejs }}',
+                category_slug: '{{ category.slug }}'
+            });
+        }
+    });
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const nav = document.getElementById('cat-nav');

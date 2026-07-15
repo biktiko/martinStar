@@ -164,6 +164,20 @@
 
 {% block extra_scripts %}
 {{ block.super }}
+    <!-- Amplitude Event Tracking -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.amplitude) {
+                amplitude.track('Product Viewed', {
+                    product_id: '{{ product.id }}',
+                    product_name: '{{ product.name|escapejs }}',
+                    category_name: '{{ category.name|escapejs }}',
+                    brand: '{{ product.brand.name|escapejs }}'
+                });
+            }
+        });
+    </script>
+    
     <!-- Script for Dynamic Option Switching -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {

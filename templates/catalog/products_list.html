@@ -87,6 +87,14 @@
 
 {% block extra_scripts %}
 {{ block.super }}
+<!-- Amplitude Event Tracking -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.amplitude) {
+            amplitude.track('Products Section Viewed');
+        }
+    });
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Stats Counter Animation
