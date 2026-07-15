@@ -9,7 +9,7 @@
 {% block content %}
     <!-- Mobile Banner Carousel -->
     {% if mobile_banners %}
-    <div class="w-full pt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:hidden relative group banner-carousel-container">
+    <div class="w-full pt-4 max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:hidden relative group banner-carousel-container">
         <div class="banner-carousel flex overflow-x-auto snap-x snap-mandatory scrollbar-none rounded-2xl shadow-sm relative" style="-ms-overflow-style: none; scrollbar-width: none;">
             {% for banner in mobile_banners %}
                 {% if banner.image %}
@@ -41,7 +41,7 @@
 
     <!-- Desktop Banner Carousel -->
     {% if desktop_banners %}
-    <div class="hidden lg:block w-full pt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative group banner-carousel-container">
+    <div class="hidden lg:block w-full pt-4 max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative group banner-carousel-container">
         <div class="banner-carousel flex overflow-x-auto snap-x snap-mandatory scrollbar-none rounded-2xl shadow-sm relative" style="-ms-overflow-style: none; scrollbar-width: none;">
             {% for banner in desktop_banners %}
                 {% if banner.image %}
@@ -81,7 +81,7 @@
 
     <div class="bg-gradient-to-b from-gray-50 to-gray-200 pb-12 md:pb-16 lg:pb-16">
         <!-- Full-width hero container -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-stretch min-h-0 lg:min-h-[calc(100vh-5rem)]">
                 
                 <!-- Left Column (40%): Mascot -->
@@ -241,7 +241,7 @@
 
     <!-- Favourite Posts Section -->
     {% if favourite_posts %}
-    <section class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 md:-mt-16 lg:-mt-16 mb-20">
+    <section class="relative z-10 w-full max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 -mt-8 md:-mt-16 lg:-mt-16 mb-20">
         <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 p-6 sm:p-10 md:p-14 border border-slate-50">
             <div class="flex flex-col items-center justify-center mb-12">
                 <span class="w-12 h-1 bg-red-600 rounded-full mb-4"></span>
@@ -249,15 +249,15 @@
             </div>
             
             {% if settings.featured_news_layout == 'GRID' %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-[1360px] 2xl:max-w-[1500px] mx-auto">
             {% elif settings.featured_news_layout == 'SLIDER' %}
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 group">
+            <div class="relative max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 group">
                 <button onclick="document.getElementById('news-slider').scrollBy({left: -300, behavior: 'smooth'})" class="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur shadow-md rounded-full w-12 h-12 items-center justify-center cursor-pointer hover:bg-white -left-6 border border-gray-100 transition-opacity opacity-0 group-hover:opacity-100">
                     <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
                 <div id="news-slider" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-6 pb-8 scroll-smooth" style="-ms-overflow-style: none; scrollbar-width: none;">
             {% else %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 max-w-[1360px] 2xl:max-w-[1500px] mx-auto">
             {% endif %}
             
                 {% for post in favourite_posts %}
