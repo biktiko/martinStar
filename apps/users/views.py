@@ -42,9 +42,11 @@ def register_view(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            send_verification_email(request, user)
-            messages.success(request, _("Registration successful! Please check your email to verify your account."))
-            return redirect('login')
+            # Email verification disabled as per user request
+            # send_verification_email(request, user)
+            login(request, user)
+            messages.success(request, _("Registration successful! You are now logged in."))
+            return redirect('index')
     else:
         form = RegistrationForm()
         
@@ -58,14 +60,10 @@ def login_view(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             user = form.user
-            if not user.is_email_verified:
-                messages.warning(request, _("Please verify your email address before logging in."))
-                # Optionally resend email here
-            else:
-                login(request, user)
-                messages.success(request, _("Successfully logged in."))
-                next_url = request.GET.get('next', 'index')
-                return redirect(next_url)
+            login(request, user)
+            messages.success(request, _("Successfully logged in."))
+            next_url = request.GET.get('next', 'index')
+            return redirect(next_url)
     else:
         form = LoginForm()
         
