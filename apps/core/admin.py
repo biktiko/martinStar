@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
-from .models import SiteSettings, FooterCompanyLink, FooterSettings, CompanyHistory, PartnerLogo, ExportCountry, BranchOffice, Vacancy
+from .models import SiteSettings, FooterCompanyLink, FooterSettings, CompanyHistory, Partner, ExportCountry, BranchOffice, Vacancy
 
 class FooterCompanyLinkInline(TranslationTabularInline, TabularInline):
     model = FooterCompanyLink
@@ -61,12 +61,12 @@ class CompanyHistoryAdmin(ModelAdmin, TranslationAdmin):
     search_fields = ('year', 'title', 'description')
     ordering = ('year',)
 
-@admin.register(PartnerLogo)
-class PartnerLogoAdmin(ModelAdmin):
-    list_display = ('name', 'is_active', 'order')
-    list_editable = ('is_active', 'order')
+@admin.register(Partner)
+class PartnerAdmin(ModelAdmin):
+    list_display = ('name', 'is_active', 'show_on_online_store', 'show_on_partners_page', 'order')
+    list_editable = ('is_active', 'show_on_online_store', 'show_on_partners_page', 'order')
     search_fields = ('name',)
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'show_on_online_store', 'show_on_partners_page')
 
 @admin.register(ExportCountry)
 class ExportCountryAdmin(ModelAdmin):

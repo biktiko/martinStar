@@ -129,15 +129,19 @@ class CompanyHistory(models.Model):
         return f"{self.year} - {self.title}"
 
 
-class PartnerLogo(models.Model):
+class Partner(models.Model):
     name = models.CharField(max_length=255)
     logo = models.ImageField(upload_to='partners/', help_text="Partner logo (transparent PNG/SVG recommended)")
     is_active = models.BooleanField(default=True)
+    show_on_online_store = models.BooleanField(default=False, verbose_name="Show in Buy Online")
+    show_on_partners_page = models.BooleanField(default=True, verbose_name="Show on Partners Page")
+    online_store_link = models.URLField(blank=True, null=True, verbose_name="Buy Online Link")
+    partner_page_link = models.URLField(blank=True, null=True, verbose_name="Partner Official Page Link")
     order = models.IntegerField(default=0)
 
     class Meta:
-        verbose_name = 'Partner Logo'
-        verbose_name_plural = 'Partner Logos'
+        verbose_name = 'Partner'
+        verbose_name_plural = 'Partners'
         ordering = ['order', 'id']
 
     def __str__(self):

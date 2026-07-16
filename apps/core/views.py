@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from apps.core.models import SiteSettings, CompanyHistory, PartnerLogo, ExportCountry, BranchOffice, Vacancy
+from apps.core.models import SiteSettings, CompanyHistory, Partner, ExportCountry, BranchOffice, Vacancy
 from apps.blog.models import Post
 from apps.core.forms import PartnershipForm
 from django.core.mail import EmailMessage
@@ -79,7 +79,7 @@ def partnership_view(request):
 
     # GET request
     banner = HeroBanner.objects.filter(placement='PARTNERSHIP', is_active=True).first()
-    partner_logos = PartnerLogo.objects.filter(is_active=True)
+    partners = Partner.objects.filter(is_active=True, show_on_partners_page=True)
     export_countries = ExportCountry.objects.filter(is_active=True)
     
     # Format export_countries as a dictionary for the template JS
@@ -92,7 +92,7 @@ def partnership_view(request):
 
     context = {
         'banner': banner,
-        'partner_logos': partner_logos,
+        'partners': partners,
         'countries_data': countries_data,
         'active_country_codes': active_country_codes,
         'global_settings': SiteSettings.load(),

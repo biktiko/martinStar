@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from .models import Category, Product, Brand, HeroBanner
-from apps.core.models import SiteSettings
+from apps.core.models import SiteSettings, Partner
 
 # @cache_page(60 * 15)
 def products_view(request):
@@ -14,12 +14,14 @@ def products_view(request):
         categories = categories.filter(brands__slug=selected_brand).distinct()
         
     banner = HeroBanner.objects.filter(placement='PRODUCTS', is_active=True).first()
+    online_partners = Partner.objects.filter(is_active=True, show_on_online_store=True)
         
     context = {
         'categories': categories,
         'brands': brands,
         'selected_brand': selected_brand,
         'banner': banner,
+        'online_partners': online_partners,
     }
     return render(request, 'catalog/products_list.html', context)
 
@@ -38,12 +40,15 @@ def category_products_view(request, category_slug):
         products = products.filter(brand__slug=selected_brand)
         categories = categories.filter(brands__slug=selected_brand).distinct()
         
+    online_partners = Partner.objects.filter(is_active=True, show_on_online_store=True)
+        
     context = {
         'category': category,
         'categories': categories,
         'products': products,
         'brands': brands,
         'selected_brand': selected_brand,
+        'online_partners': online_partners,
     }
     return render(request, 'catalog/product_list.html', context)
 

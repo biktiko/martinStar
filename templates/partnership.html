@@ -159,12 +159,18 @@
     </section>
 
     <!-- 6. Dynamic Partner Logos -->
-    {% if partner_logos %}
+    {% if partners %}
     <section class="max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 mb-24">
         <h2 class="text-2xl font-bold uppercase text-slate-900 text-center mb-12 tracking-wide">{% t "They Work With Us" %}</h2>
         <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 transition-opacity duration-500">
-            {% for logo in partner_logos %}
-                <img src="{{ logo.logo.url }}" alt="{{ logo.name }}" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 transform hover:scale-110 hover:drop-shadow-md">
+            {% for logo in partners %}
+                {% if logo.partner_page_link %}
+                    <a href="{{ logo.partner_page_link }}" target="_blank" rel="noopener noreferrer" class="transition-all duration-300 transform hover:scale-110 hover:drop-shadow-md">
+                        <img src="{{ logo.logo.url }}" alt="{{ logo.name }}" class="h-12 md:h-16 w-auto object-contain">
+                    </a>
+                {% else %}
+                    <img src="{{ logo.logo.url }}" alt="{{ logo.name }}" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 transform hover:scale-110 hover:drop-shadow-md">
+                {% endif %}
             {% endfor %}
         </div>
     </section>
