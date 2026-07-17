@@ -9,7 +9,6 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from apps.catalog.models import Category, HeroBanner
 
-@cache_page(60 * 15)
 def index(request):
     categories = Category.objects.filter(is_active=True).order_by('id')
     

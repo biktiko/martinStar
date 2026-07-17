@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 from .forms import RegistrationForm, LoginForm
 from .models import CustomUser
+from apps.analytics.amplitude import amplitude_client
 
 def send_verification_email(request, user):
     token = default_token_generator.make_token(user)
@@ -45,6 +46,22 @@ def register_view(request):
             # Email verification disabled as per user request
             # send_verification_email(request, user)
             login(request, user)
+            
+            # Synchronize newly registered account with Amplitude
+            user_properties = {
+                "email": user.email,
+                "name": user.get_full_name()
+            }
+            if user.phone_number:
+                user_properties["phone"] = user.phone_number
+                
+            amplitude_client.track_event(
+                user_id=user.id,
+                event_type="User Registered",
+                user_properties=user_properties,
+                device_id=request.session.session_key or "server_side"
+            )
+            
             messages.success(request, _("Registration successful! You are now logged in."))
             return redirect('index')
     else:
@@ -61,6 +78,14 @@ def login_view(request):
         if form.is_valid():
             user = form.user
             login(request, user)
+            
+            # Track login event
+            amplitude_client.track_event(
+                user_id=user.id,
+                event_type="User Logged In",
+                device_id=request.session.session_key or "server_side"
+            )
+            
             messages.success(request, _("Successfully logged in."))
             next_url = request.GET.get('next', 'index')
             return redirect(next_url)
