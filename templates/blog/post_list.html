@@ -9,6 +9,19 @@
     <div class="max-w-[1360px] 2xl:max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
         <!-- <h1 class="text-4xl font-extrabold text-slate-900 mb-8 text-center uppercase tracking-wider">{% t "Blog" %}</h1> -->
         
+        <div class="max-w-4xl mx-auto text-center mt-8 mb-10 px-4">
+            {% get_current_language as LANGUAGE_CODE %}
+            <p class="text-base md:text-lg text-slate-600 leading-relaxed font-medium">
+                {% if LANGUAGE_CODE == 'hy' %}
+                    Ընկերության գործունեության, ընթացիկ առաջարկների և նոր ապրանքների վերաբերյալ վերջին նորությունները։ Այս բաժնում դուք կգտնեք հետաքրքիր բաղադրատոմսեր և օգտակար հոդվածներ, ինչպես նաև զվարճալի և կրթական բովանդակություն։
+                {% elif LANGUAGE_CODE == 'en' %}
+                    The latest news about the company, current offers, product innovations, fascinating recipes, useful articles for entertainment and education, and much more.
+                {% else %}
+                    Самые свежие новости о жизни компании, актуальные предложения и продуктовые новинки. А также интересные рецепты и полезные статьи в качестве развлекательно-познавательного контента.
+                {% endif %}
+            </p>
+        </div>
+
         {% if topics %}
         <div class="flex flex-wrap items-center justify-center gap-3 mb-12">
             <a href="?topic=" class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 {% if not current_topic %}bg-slate-900 text-white shadow-md{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %}">
